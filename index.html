@@ -2,536 +2,803 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Math Practice Arena</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>Math PK Arena</title>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:system-ui, sans-serif}
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a1a;--bg2:#1a1a3e;--bg3:#0f0c29;
+  --card:rgba(255,255,255,.06);--card-border:rgba(255,255,255,.1);
+  --card-border-hover:rgba(255,255,255,.2);
+  --accent:#7f5af0;--accent2:#2cb67d;--danger:#e53170;--warn:#f9c74f;
+  --text:#fffffe;--text2:#94a1b2;--text3:#6b7280;
+  --radius:18px;--shadow:0 8px 32px rgba(0,0,0,.4);
+  --glow-accent:0 0 20px rgba(127,90,240,.4);
+  --glow-accent2:0 0 20px rgba(44,182,125,.4);
+}
 body{
-  min-height:100vh;
-  background:linear-gradient(135deg,#121524,#1c2340);
-  color:#fff;
-  display:flex;align-items:center;justify-content:center;
-  padding:20px;overflow:hidden;
+  font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;
+  display:flex;justify-content:center;align-items:center;position:relative;
 }
-#particles{
-  position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;
+/* 动态渐变背景球 */
+.bg-orbs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;overflow:hidden;pointer-events:none}
+.orb{position:absolute;border-radius:50%;filter:blur(80px);opacity:.35;animation:floatOrb 20s infinite ease-in-out}
+.orb:nth-child(1){width:400px;height:400px;background:radial-gradient(circle,var(--accent),transparent 70%);top:-10%;left:-10%;animation-delay:0s}
+.orb:nth-child(2){width:350px;height:350px;background:radial-gradient(circle,var(--accent2),transparent 70%);top:50%;right:-10%;animation-delay:-5s}
+.orb:nth-child(3){width:300px;height:300px;background:radial-gradient(circle,#f9c74f30,transparent 70%);bottom:-10%;left:30%;animation-delay:-10s}
+.orb:nth-child(4){width:250px;height:250px;background:radial-gradient(circle,#e5317040,transparent 70%);top:30%;left:50%;animation-delay:-15s}
+@keyframes floatOrb{0%,100%{transform:translate(0,0) scale(1)}25%{transform:translate(50px,-50px) scale(1.1)}50%{transform:translate(-30px,60px) scale(.95)}75%{transform:translate(60px,30px) scale(1.05)}}
+/* 点阵网格背景 */
+.bg-grid{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:40px 40px;pointer-events:none}
+/* 浮动粒子 */
+.particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;overflow:hidden}
+.particle{position:absolute;width:3px;height:3px;background:rgba(255,255,255,.25);border-radius:50%;animation:rise linear infinite}
+@keyframes rise{0%{transform:translateY(100vh) translateX(0) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) translateX(100px) scale(1);opacity:0}}
+.screen{display:none;width:100%;max-width:540px;padding:20px;animation:fadeIn .5s cubic-bezier(.22,1,.36,1)}
+.screen.active{display:flex;flex-direction:column;align-items:center;gap:20px}
+@keyframes fadeIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+@keyframes pulseGlow{0%,100%{box-shadow:0 0 15px rgba(127,90,240,.3)}50%{box-shadow:0 0 30px rgba(127,90,240,.6)}}
+@keyframes shakeX{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-5px)}30%,60%,90%{transform:translateX(5px)}}
+@keyframes scaleIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+@keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+@keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
+h1{
+  font-size:2.2rem;font-weight:900;
+  background:linear-gradient(135deg,#7f5af0,#2cb67d,#f9c74f,#7f5af0);
+  background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  text-align:center;line-height:1.2;animation:gradientShift 4s ease infinite,float 3s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px rgba(127,90,240,.3));
 }
-.wrap{
-  position:relative;z-index:1;
-  width:min(900px,100%);
-  background:rgba(255,255,255,0.08);
-  backdrop-filter:blur(12px);
-  border-radius:20px;border:1px solid rgba(255,255,255,0.15);
-  padding:32px;box-shadow:0 10px 40px rgba(0,0,0,0.3);
+h2{font-size:1.5rem;text-align:center;animation:slideUp .5s ease}
+.subtitle{color:var(--text2);font-size:.95rem;text-align:center;margin-top:-6px;animation:slideUp .5s ease .1s both}
+/* 玻璃拟态卡片 */
+.card{
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:28px;width:100%;
+  backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);
+  box-shadow:var(--shadow),inset 0 1px 0 rgba(255,255,255,.05);
+  transition:all .3s cubic-bezier(.22,1,.36,1);position:relative;overflow:hidden;
 }
-h1{text-align:center;margin-bottom:24px;color:#e8f0ff}
-.menu{display:flex;flex-direction:column;gap:16px;align-items:center}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent)}
+.card:hover{border-color:var(--card-border-hover);box-shadow:var(--shadow),0 0 30px rgba(127,90,240,.1),inset 0 1px 0 rgba(255,255,255,.08)}
+/* 按钮 */
 .btn{
-  padding:14px 32px;border:none;border-radius:12px;
-  font-size:18px;font-weight:bold;cursor:pointer;
-  background:linear-gradient(90deg,#477bff,#7254ff);
-  color:white;transition:0.2s;
+  border:none;border-radius:14px;padding:15px 30px;font-size:1rem;font-weight:700;
+  cursor:pointer;transition:all .25s cubic-bezier(.22,1,.36,1);width:100%;letter-spacing:.5px;
+  position:relative;overflow:hidden;
 }
-.btn:hover{transform:scale(1.04);box-shadow:0 0 18px #557cff88}
-.quiz-area{display:none}
-.info-row{display:flex;justify-content:space-between;margin-bottom:16px;font-size:17px}
-.question{
-  font-size:24px;text-align:center;margin:28px 0;
-  min-height:70px;display:flex;align-items:center;justify-content:center;
+.btn::after{content:'';position:absolute;top:0;left:-100%;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);transition:left .5s}
+.btn:hover::after{left:100%}
+.btn-primary{background:linear-gradient(135deg,var(--accent),#6b4fe0);color:#fff;box-shadow:0 4px 15px rgba(127,90,240,.3)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 6px 25px rgba(127,90,240,.45)}
+.btn-primary:active{transform:translateY(-1px) scale(.98)}
+.btn-secondary{background:rgba(255,255,255,.08);color:var(--text);border:1px solid var(--card-border)}
+.btn-secondary:hover{background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.2);transform:translateY(-2px)}
+.btn-secondary:active{transform:translateY(0) scale(.98)}
+/* 输入框：支持字母数字，纯文本模式 */
+input[type=text]{
+  width:100%;padding:15px 18px;border-radius:14px;border:1px solid var(--card-border);
+  background:rgba(255,255,255,.05);color:#fff;font-size:1.1rem;outline:none;
+  transition:all .25s;text-align:center;box-shadow:inset 2px 4px rgba(0,0,0,.1);
+  /* 强制不弹数字键盘，允许全字符输入 */
+  inputmode: text;
 }
-.input-wrap{display:flex;gap:10px;justify-content:center;margin-bottom:20px}
-#ansInput{
-  width:340px;padding:14px 16px;font-size:20px;border-radius:10px;
-  border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.09);
-  color:#fff;outline:none;
+input[type=text]:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(127,90,240,.15),inset 0 2px 4px rgba(0,0,0,.1);background:rgba(255,255,255,.08)}
+input::placeholder{color:var(--text3)}
+/* 声音按钮 */
+.sound-btn{
+  position:fixed;top:20px;right:20px;z-index:99;
+  width:48px;height:48px;border-radius:50%;border:1px solid var(--card-border);
+  background:var(--card);backdrop-filter:blur(12px);cursor:pointer;
+  font-size:1.4rem;display:flex;align-items:center;justify-content:center;
+  transition:all .3s;box-shadow:0 4px 12px rgba(0,0,0,.2);
 }
-#ansInput:focus{border-color:#688eff}
-.feedback{text-align:center;font-size:20px;height:30px;margin-bottom:12px}
-.correct{color:#73ff9b}
-.wrong{color:#ff7c7c}
-.stat{display:flex;gap:24px;justify-content:center;margin-top:12px;color:#c8d4ee}
+.sound-btn:hover{background:rgba(255,255,255,.12);transform:scale(1.1);box-shadow:0 6px 20px rgba(0,0,0,.3)}
+/* 品牌标识 */
+.brand{position:fixed;top:22px;left:24px;z-index:99;font-size:.8rem;font-weight:700;color:rgba(255,255,255,.35);letter-spacing:.8px;user-select:none}
+/* 游戏区域 */
+.q-card{text-align:center;padding:36px 28px;border:1px solid var(--card-border);background:linear-gradient(135deg,rgba(127,90,240,.05),rgba(44,182,125,.05))}
+.q-card.new-q{animation:scaleIn .3s ease}
+.q-text{font-size:1.5rem;font-weight:800;line-height:1.5;margin:16px 0 24px;word-break:break-word;min-height:80px;display:flex;align-items:center;justify-content:center;white-space:pre-line}
+.tags{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-bottom:12px}
+.tag{padding:5px 14px;border-radius:20px;font-size:.8rem;font-weight:700;letter-spacing:.5px}
+.tag-arithmetic{background:rgba(127,90,240,.2);color:#b4a0ff;border:1px solid rgba(127,90,240,.2)}
+.tag-algebra{background:rgba(44,182,125,.2);color:#6ee7b7;border:1px solid rgba(44,182,125,.2)}
+.tag-frac{background:rgba(255,100,150,.15);color:#ff94b8;border:1px solid rgba(255,100,150,.2)}
+.tag-percent{background:rgba(255,160,80,.15);color:#ffc080;border:1px solid rgba(255,160,80,.2)}
+.tag-geo{background:rgba(120,180,255,.15);color:#90c8ff;border:1px solid rgba(120,180,255,.2)}
+.tag-prob{background:rgba(180,120,255,.15);color:#c8a0ff;border:1px solid rgba(180,120,255,.2)}
+.tag-trig{background:rgba(255,200,100,.15);color:#ffd880;border:1px solid rgba(255,200,100,.2)}
+.tag-calc{background:rgba(255,120,180,.15);color:#ff9cc4;border:1px solid rgba(255,120,180,.2)}
+.tag-diff{background:rgba(255,255,255,.08);color:var(--text2);border:1px solid rgba(255,255,255,.1)}
+/* 反馈 */
+.fb{margin-top:14px;padding:14px 18px;border-radius:14px;font-weight:700;text-align:center;font-size:1rem;opacity:0;transition:all .3s}
+.fb.show{opacity:1;animation:slideUp .3s ease}
+.fb.correct{background:rgba(44,182,125,.12);color:#6ee7b7;border:1px solid rgba(44,182,125,.25)}
+.fb.wrong{background:rgba(229,49,112,.12);color:#ff8fab;border:1px solid rgba(229,49,112,.2);animation:shakeX .5s}
+/* 计分板 */
+.scoreboards{display:flex;gap:12px;width:100%;flex-wrap:wrap;justify-content:center}
+.sb{flex:1 1 110px;min-width:110px;max-width:170px;background:var(--card);border:1px solid var(--card-border);border-radius:14px;padding:14px;text-align:center;transition:all .3s;backdrop-filter:blur(8px)}
+.sb-name{font-size:.85rem;color:var(--text2);margin-bottom:6px}
+.sb-score{font-size:1.8rem;font-weight:900;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.sb-lv{font-size:.75rem;color:var(--accent);margin-top:4px;font-weight:700}
+/* 进度条 */
+.progress-bar{width:100%;height:8px;background:rgba(255,255,255,.06);border-radius:4px;overflow:hidden;position:relative}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));border-radius:4px;transition:width .5s cubic-bezier(.22,1,.36,1);position:relative}
+.progress-fill::after{content:'';position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);animation:shimmer 2s infinite}
+.progress-text{font-size:.8rem;color:var(--text2);text-align:center;margin-top:6px}
+/* 结果页面 */
+.winner{font-size:1.5rem;font-weight:900;text-align:center;margin:10px 0;background:linear-gradient(135deg,#f9c74f,#f9844a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:float 2s ease-in-out infinite;filter:drop-shadow(0 0 15px rgba(249,199,79,.4))}
+.final-scores{display:flex;gap:14px;width:100%;margin:14px 0;flex-wrap:wrap;justify-content:center}
+.final-sb{flex:1 1 130px;min-width:130px;max-width:190px;background:var(--card);border:1px solid var(--card-border);border-radius:16px;padding:20px;text-align:center;transition:all .3s;backdrop-filter:blur(8px)}
+.final-sb:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,.3)}
+.final-sb.winner-box{border-color:var(--warn);background:rgba(249,199,79,.06);box-shadow:0 0 25px rgba(249,199,79,.15)}
+.fs-rank{font-size:.85rem;color:var(--accent);font-weight:700;margin-bottom:4px}
+.fs-name{font-size:.9rem;color:var(--text2)}
+.fs-score{font-size:2.2rem;font-weight:900;margin-top:6px}
+.detail{font-size:.85rem;color:var(--text2);text-align:center;line-height:1.8}
+/* 按钮组 */
+.actions{display:flex;gap:12px;width:100%;margin-top:8px}
+.actions .btn{flex:1}
 /* 67彩蛋特效容器 */
 #egg67Container{
   position:fixed;top:0;left:0;width:100vw;height:100vh;
-  pointer-events:none;z-index:999;overflow:hidden;
+  pointer-events:none;z-index:9999;overflow:hidden;
 }
 .egg67-text{
-  position:absolute;font-size:60px;font-weight:bold;
-  color:#ffdd44;text-shadow:0 0 12px #ffaa00;
+  position:absolute;font-size:64px;font-weight:900;
+  color:#ffdd44;text-shadow:0 0 16px #ffaa00, 0 0 32px #ff8800;
+  user-select:none;
+}
+/* 响应式 */
+@media(max-width:480px){
+  h1{font-size:1.7rem}.q-text{font-size:1.2rem}
+  .card{padding:22px}
+  .btn{padding:13px 24px;font-size:.95rem}
 }
 </style>
 </head>
 <body>
-<div id="particles"></div>
+<!-- 视觉效果层 -->
+<div class="bg-orbs"><div class="orb"></div><div class="orb"></div><div class="orb"></div><div class="orb"></div></div>
+<div class="bg-grid"></div>
+<div class="particles" id="particles"></div>
 <div id="egg67Container"></div>
-<div class="wrap">
-  <div class="menu" id="mainMenu">
-    <h1>Math Practice Arena</h1>
-    <button class="btn" onclick="startSingle()">Start Single Practice</button>
-  </div>
 
-  <div class="quiz-area" id="quizBox">
-    <div class="info-row">
-      <span>Score: <span id="score">0</span></span>
-      <span>Level: <span id="level">1</span> / 20</span>
-    </div>
-    <div class="question" id="question"></div>
-    <div class="input-wrap">
-      <input type="text" id="ansInput" placeholder="Type your answer here..." autocomplete="off">
-      <button class="btn" onclick="submitAnswer()">Submit</button>
-    </div>
-    <div class="feedback" id="feedback"></div>
-    <div class="stat">
-      <span>Correct: <span id="cntCorrect">0</span></span>
-      <span>Wrong: <span id="cntWrong">0</span></span>
-    </div>
-    <div style="text-align:center;margin-top:24px">
-      <button class="btn" onclick="backMenu()">Back to Menu</button>
-    </div>
+<button class="sound-btn" id="soundToggle" onclick="toggleSound()">🔇</button>
+<div class="brand">Made by AntonDing</div>
+
+<!-- MENU -->
+<div class="screen active" id="menuScreen">
+  <h1>🧮 Math PK Arena</h1>
+  <p class="subtitle">From elementary to high school · Adaptive difficulty · Solo Practice</p>
+  <div class="card" style="display:flex;flex-direction:column;gap:12px">
+    <button class="btn btn-primary" onclick="startSolo()">🎯 Solo Practice</button>
   </div>
 </div>
 
+<!-- GAME -->
+<div class="screen" id="gameScreen">
+  <div class="scoreboards" id="scoreboards"></div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+  <div class="progress-text" id="progressText"></div>
+  <div class="card q-card">
+    <div class="tags" id="tags"></div>
+    <div class="q-text" id="qText"></div>
+    <input type="text" id="answerInput" placeholder="Your answer…" autocomplete="off" inputmode="text">
+    <div class="fb" id="feedback"></div>
+    <div style="display:flex;gap:10px;margin-top:16px">
+      <button class="btn btn-primary" id="submitBtn" onclick="submitAnswer()">Submit</button>
+      <button class="btn btn-secondary" id="nextBtn" onclick="nextQuestion()" style="display:none">Next →</button>
+    </div>
+  </div>
+  <div style="font-size:.75rem;color:var(--text2);text-align:center" id="modeTag"></div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="resultScreen">
+  <div class="card" id="resultCard" style="display:flex;flex-direction:column;gap:10px"></div>
+</div>
+
 <script>
-// 扩充题库，Lv1~Lv20 大量新增题目
+/* ========== 音频引擎 ========== */
+let audioCtx=null, soundOn=false, masterGain=null;
+function ensureAudio(){
+  if(!audioCtx){
+    audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+    masterGain=audioCtx.createGain();
+    masterGain.gain.setValueAtTime(0.5,audioCtx.currentTime);
+    masterGain.connect(audioCtx.destination);
+  }
+}
+function playTone(freq,dur,type='sine',vol=0.1,delay=0,attack=0.01,release=0.1){
+  if(!soundOn)return;ensureAudio();
+  const t=audioCtx.currentTime+delay;
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+  o.type=type;o.frequency.setValueAtTime(freq,t);
+  g.gain.setValueAtTime(0.001,t);
+  g.gain.linearRampToValueAtTime(vol,t+attack);
+  g.gain.setValueAtTime(vol,t+dur-release);
+  g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  o.connect(g);g.connect(masterGain||audioCtx.destination);
+  o.start(t);o.stop(t+dur+0.01);
+  return{o,g};
+}
+function playNoise(dur,vol=0.05){
+  if(!soundOn)return;ensureAudio();
+  const bufferSize=audioCtx.sampleRate*dur;
+  const buffer=audioCtx.createBuffer(1,bufferSize,audioCtx.sampleRate);
+  const data=buffer.getChannelData(0);
+  for(let i=0;i<bufferSize;i++) data[i]=Math.random()*2-1;
+  const source=audioCtx.createBufferSource();
+  source.buffer=buffer;
+  const g=audioCtx.createGain();
+  const t=audioCtx.currentTime;
+  g.gain.setValueAtTime(vol,t);
+  g.gain.exponentialRampToValueAtTime(0.001,t+dur);
+  source.connect(g);g.connect(masterGain||audioCtx.destination);
+  source.start(t);source.stop(t+dur);
+}
+let bgmTimer=null,bgmPlaying=false,bgmIdx=0;
+const bgmChords=[
+  {root:261.6,third:329.6,fifth:392.0,seventh:493.9},
+  {root:220.0,third:261.6,fifth:329.6,seventh:392.0},
+  {root:174.6,third:220.0,fifth:261.6,seventh:329.6},
+  {root:196.0,third:246.9,fifth:293.7,seventh:349.2},
+];
+const bgmNoteDur=0.18, bgmInterval=220;
+function startBGM(){
+  if(bgmPlaying)return;bgmPlaying=true;bgmIdx=0;tickBGM();
+}
+function tickBGM(){
+  if(!bgmPlaying)return;
+  const chordIdx=Math.floor(bgmIdx/4)%bgmChords.length;
+  const chord=bgmChords[chordIdx];
+  const noteInChord=bgmIdx%4;
+  const noteFreqs=[chord.root*2,chord.third*2,chord.fifth*2,chord.seventh*2];
+  playTone(noteFreqs[noteInChord],bgmNoteDur,'triangle',0.018,0,0.005,0.05);
+  if(noteInChord===0){
+    playTone(chord.root/2,0.35,'sine',0.04,0,0.02,0.1);
+  }
+  if(noteInChord===0 && bgmIdx>4){
+    playTone(chord.root,0.8,'sine',0.008,0,0.05,0.3);
+    playTone(chord.fifth,0.8,'sine',0.005,0,0.05,0.3);
+  }
+  bgmIdx++;
+  bgmTimer=setTimeout(tickBGM,bgmInterval);
+}
+function stopBGM(){bgmPlaying=false;clearTimeout(bgmTimer)}
+function toggleSound(){
+  soundOn=!soundOn;
+  $('soundToggle').textContent=soundOn?'🔊':'🔇';
+  if(soundOn){
+    ensureAudio();
+    if(audioCtx.state==='suspended')audioCtx.resume();
+    startBGM();
+    playTone(880,.1,'sine',.05);
+  }else{
+    stopBGM();
+    playTone(440,.15,'sine',.03);
+  }
+}
+function sfxCorrect(){
+  playTone(523,.08,'sine',.08,0,0.005,0.02);
+  playTone(659,.08,'sine',.06,.06,0.005,0.02);
+  playTone(784,.12,'sine',.08,.12,0.005,0.03);
+  playTone(1047,.2,'triangle',.05,.2,0.005,0.05);
+  playTone(1319,.15,'sine',.03,.3,0.005,0.04);
+  playNoise(0.05,0.03);
+}
+function sfxWrong(){
+  playTone(349,.15,'sawtooth',.05,0,0.005,0.05);
+  playTone(277,.2,'sawtooth',.04,.1,0.005,0.05);
+  playTone(220,.3,'sawtooth',.03,.2,0.005,0.08);
+  playTone(165,.25,'square',.02,.15,0.005,0.06);
+  playNoise(0.08,0.02);
+}
+function sfxClick(){
+  playTone(1000,.03,'sine',.03,0,0.002,0.01);
+  playTone(1500,.02,'sine',.02,.01,0.002,0.008);
+}
+function sfxLevelUp(){
+  const notes=[523,659,784,1047,1319,1568];
+  notes.forEach((f,i)=>{
+    playTone(f,.1,'triangle',.06,i*.06,0.005,0.03);
+    if(i>2) playTone(f*2,.08,'sine',.02,i*.06,0.005,0.02);
+  });
+  playNoise(0.1,0.02);
+}
+function sfxLevelDown(){
+  [392,330,262,220].forEach((f,i)=>{
+    playTone(f,.12,'sawtooth',.04,i*.08,0.005,0.04);
+  });
+}
+function sfxScreenTransition(){
+  ensureAudio();
+  const t=audioCtx.currentTime;
+  const o=audioCtx.createOscillator();
+  const g=audioCtx.createGain();
+  o.type='sine';
+  o.frequency.setValueAtTime(200,t);
+  o.frequency.exponentialRampToValueAtTime(800,t+0.15);
+  g.gain.setValueAtTime(0.03,t);
+  g.gain.exponentialRampToValueAtTime(0.001,t+0.2);
+  o.connect(g);g.connect(masterGain||audioCtx.destination);
+  o.start(t);o.stop(t+0.25);
+}
+function sfxVictory(){
+  const melody=[523,659,784,1047,784,1047,1319,1568];
+  melody.forEach((f,i)=>{
+    playTone(f,.15,'triangle',.06,i*.1,0.005,0.03);
+    playTone(f*1.5,.12,'sine',.02,i*.1,0.005,0.02);
+  });
+  setTimeout(()=>{
+    playTone(261.6,.5,'sine',.03,0,0.05,0.2);
+    playTone(329.6,.5,'sine',.02,0,0.05,0.2);
+    playTone(392.0,.5,'sine',.015,0,0.05,0.2);
+  },800);
+}
+function sfxDefeat(){
+  const melody=[392,349,329,294,262,247,220];
+  melody.forEach((f,i)=>{
+    playTone(f,.2,'sawtooth',.03,i*.15,0.005,0.05);
+  });
+}
+
+/* ========== 工具函数 ========== */
+const $=id=>document.getElementById(id);
+const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
+const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
+const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
+const fmt=n=>Number.isInteger(n)?n.toString():parseFloat(n.toFixed(4)).toString();
+
+/* ========== 20级题库 ========== */
 const bankLv1 = [
-  {q:"What is 5 + 8?",a:13},
-  {q:"What is 12 - 4?",a:8},
-  {q:"Calculate 6 × 7",a:42},
-  {q:"Calculate 48 ÷ 6",a:8},
-  {q:"What is 9 + 15?",a:24},
-  {q:"What is 20 - 13?",a:7},
-  {q:"3 × 9 = ?",a:27},
-  {q:"56 ÷ 7 = ?",a:8},
-  {q:"11 + 19 = ?",a:30},
-  {q:"34 - 16 = ?",a:18},
-  {q:"17 + 22 = ?",a:39},
-  {q:"41 - 17 = ?",a:24},
-  {q:"8 × 4 = ?",a:32},
-  {q:"63 ÷ 9 = ?",a:7},
-  {q:"25 + 14 = ?",a:39},
-  {q:"50 - 28 = ?",a:22},
-  {q:"7 × 8 = ?",a:56},
-  {q:"72 ÷ 8 = ?",a:9},
-  {q:"13 + 27 = ?",a:40},
-  {q:"45 - 19 = ?",a:26}
+  {q:"What is 5 + 8?",a:13,type:"Arithmetic"},
+  {q:"Calculate 12 − 4",a:8,type:"Arithmetic"},
+  {q:"Calculate 6 × 7",a:42,type:"Arithmetic"},
+  {q:"Calculate 48 ÷ 6",a:8,type:"Arithmetic"},
+  {q:"What is 9 + 15?",a:24,type:"Arithmetic"},
+  {q:"What is 20 − 13?",a:7,type:"Arithmetic"},
+  {q:"3 × 9 = ?",a:27,type:"Arithmetic"},
+  {q:"56 ÷ 7 = ?",a:8,type:"Arithmetic"},
+  {q:"11 + 19 = ?",a:30,type:"Arithmetic"},
+  {q:"34 − 16 = ?",a:18,type:"Arithmetic"},
+  {q:"17 + 22 = ?",a:39,type:"Arithmetic"},
+  {q:"41 − 17 = ?",a:24,type:"Arithmetic"},
+  {q:"8 × 4 = ?",a:32,type:"Arithmetic"},
+  {q:"63 ÷ 9 = ?",a:7,type:"Arithmetic"},
+  {q:"25 + 14 = ?",a:39,type:"Arithmetic"},
+  {q:"50 − 28 = ?",a:22,type:"Arithmetic"},
+  {q:"7 × 8 = ?",a:56,type:"Arithmetic"},
+  {q:"72 ÷ 8 = ?",a:9,type:"Arithmetic"},
+  {q:"13 + 27 = ?",a:40,type:"Arithmetic"},
+  {q:"45 − 19 = ?",a:26,type:"Arithmetic"}
 ];
 const bankLv2 = [
-  {q:"0.3 + 0.6 = ?",a:0.9},
-  {q:"0.8 - 0.25 = ?",a:0.55},
-  {q:"0.4 × 5 = ?",a:2},
-  {q:"1.2 ÷ 0.3 = ?",a:4},
-  {q:"1/2 + 1/4 = ?",a:0.75},
-  {q:"3/4 - 1/8 = ?",a:0.625},
-  {q:"2/3 × 3 = ?",a:2},
-  {q:"5 ÷ 1/2 = ?",a:10},
-  {q:"Simplify 4/8",a:0.5},
-  {q:"Simplify 6/9",a:2/3},
-  {q:"0.15 + 0.72 = ?",a:0.87},
-  {q:"1.5 - 0.38 = ?",a:1.12},
-  {q:"0.25 × 0.8 = ?",a:0.2},
-  {q:"3.6 ÷ 0.6 = ?",a:6},
-  {q:"2/5 + 1/10 = ?",a:0.5},
-  {q:"5/6 - 1/3 = ?",a:0.5},
-  {q:"3/4 × 2/3 = ?",a:0.5},
-  {q:"4 ÷ 2/3 = ?",a:6},
-  {q:"Simplify 12/16",a:0.75},
-  {q:"Simplify 10/25",a:0.4}
+  {q:"0.3 + 0.6 = ?",a:0.9,type:"Arithmetic"},
+  {q:"0.8 − 0.25 = ?",a:0.55,type:"Arithmetic"},
+  {q:"0.4 × 5 = ?",a:2,type:"Arithmetic"},
+  {q:"1.2 ÷ 0.3 = ?",a:4,type:"Arithmetic"},
+  {q:"1/2 + 1/4 = ? (decimal)",a:0.75,type:"Fraction"},
+  {q:"3/4 − 1/8 = ? (decimal)",a:0.625,type:"Fraction"},
+  {q:"2/3 × 3 = ?",a:2,type:"Fraction"},
+  {q:"5 ÷ 1/2 = ?",a:10,type:"Fraction"},
+  {q:"Simplify 4/8, give decimal",a:0.5,type:"Fraction"},
+  {q:"0.15 + 0.72 = ?",a:0.87,type:"Arithmetic"},
+  {q:"1.5 − 0.38 = ?",a:1.12,type:"Arithmetic"},
+  {q:"0.25 × 0.8 = ?",a:0.2,type:"Arithmetic"},
+  {q:"3.6 ÷ 0.6 = ?",a:6,type:"Arithmetic"},
+  {q:"2/5 + 1/10 = ? (decimal)",a:0.5,type:"Fraction"},
+  {q:"5/6 − 1/3 = ? (decimal)",a:0.5,type:"Fraction"},
+  {q:"3/4 × 2/3 = ? (decimal)",a:0.5,type:"Fraction"},
+  {q:"4 ÷ 2/3 = ?",a:6,type:"Fraction"},
+  {q:"Simplify 12/16, give decimal",a:0.75,type:"Fraction"},
+  {q:"Simplify 10/25, give decimal",a:0.4,type:"Fraction"},
+  {q:"0.6 × 0.5 = ?",a:0.3,type:"Arithmetic"}
 ];
 const bankLv3 = [
-  {q:"What is 10% of 150?",a:15},
-  {q:"What is 25% of 80?",a:20},
-  {q:"What is 40% of 200?",a:80},
-  {q:"15% of 60 = ?",a:9},
-  {q:"5% of 400 = ?",a:20},
-  {q:"If ratio 2:3, first number is 8, find second",a:12},
-  {q:"Ratio 3:7, second number is 21, find first",a:9},
-  {q:"Simplify ratio 12:18",a:2/3},
-  {q:"Simplify ratio 20:5",a:4},
-  {q:"Find x if 3/5 = x/20",a:12},
-  {q:"30% of 140 = ?",a:42},
-  {q:"75% of 120 = ?",a:90},
-  {q:"8% of 250 = ?",a:20},
-  {q:"Ratio 4:9, first=12, second=?",a:27},
-  {q:"Simplify ratio 24:32",a:0.75},
-  {q:"Find x if 7/10 = x/50",a:35},
-  {q:"12% of 300 = ?",a:36},
-  {q:"50% of 76 = ?",a:38},
-  {q:"Ratio 5:2, second=6, first=?",a:15},
-  {q:"Simplify ratio 14:35",a:0.4}
+  {q:"What is 10% of 150?",a:15,type:"Percent"},
+  {q:"What is 25% of 80?",a:20,type:"Percent"},
+  {q:"What is 40% of 200?",a:80,type:"Percent"},
+  {q:"15% of 60 = ?",a:9,type:"Percent"},
+  {q:"5% of 400 = ?",a:20,type:"Percent"},
+  {q:"Ratio 2:3, first number is 8, find second",a:12,type:"Ratio"},
+  {q:"Ratio 3:7, second number is 21, find first",a:9,type:"Ratio"},
+  {q:"Simplify ratio 12:18, give first/second decimal",a:2/3,type:"Ratio"},
+  {q:"Simplify ratio 20:5, give value",a:4,type:"Ratio"},
+  {q:"Find x if 3/5 = x/20",a:12,type:"Ratio"},
+  {q:"30% of 140 = ?",a:42,type:"Percent"},
+  {q:"75% of 120 = ?",a:90,type:"Percent"},
+  {q:"8% of 250 = ?",a:20,type:"Percent"},
+  {q:"Ratio 4:9, first=12, second=?",a:27,type:"Ratio"},
+  {q:"Simplify ratio 24:32, give decimal",a:0.75,type:"Ratio"},
+  {q:"Find x if 7/10 = x/50",a:35,type:"Ratio"},
+  {q:"12% of 300 = ?",a:36,type:"Percent"},
+  {q:"50% of 76 = ?",a:38,type:"Percent"},
+  {q:"Ratio 5:2, second=6, first=?",a:15,type:"Ratio"},
+  {q:"Simplify ratio 14:35, give decimal",a:0.4,type:"Ratio"}
 ];
 const bankLv4 = [
-  {q:"Area of square side=7",a:49},
-  {q:"Area of rectangle length=9 width=4",a:36},
-  {q:"Area of triangle base=8 height=5",a:20},
-  {q:"Perimeter of square side=6",a:24},
-  {q:"Perimeter of rectangle 10 and 3",a:26},
-  {q:"Circumference of circle r=5 (π=3.14)",a:31.4},
-  {q:"Area of circle r=4 (π=3.14)",a:50.24},
-  {q:"Volume cube side=5",a:125},
-  {q:"Volume rectangular box 4,3,2",a:24},
-  {q:"Area parallelogram base=9 height=4",a:36},
-  {q:"Area square side=11",a:121},
-  {q:"Triangle base=12 height=7, area",a:42},
-  {q:"Perimeter rectangle 12 and 5",a:34},
-  {q:"Circle r=6, area π=3.14",a:113.04},
-  {q:"Cube side=7 volume",a:343},
-  {q:"Cuboid 5,4,3 volume",a:60},
-  {q:"Parallelogram base=12 height=6 area",a:72},
-  {q:"Trapezoid a=4,b=6,h=5 area",a:25},
-  {q:"Circle r=3 circumference π=3.14",a:18.84},
-  {q:"Square side=13 perimeter",a:52}
+  {q:"Area of square with side 7",a:49,type:"Geometry"},
+  {q:"Area of rectangle length=9 width=4",a:36,type:"Geometry"},
+  {q:"Area of triangle base=8 height=5",a:20,type:"Geometry"},
+  {q:"Perimeter of square side=6",a:24,type:"Geometry"},
+  {q:"Perimeter of rectangle 10 and 3",a:26,type:"Geometry"},
+  {q:"Circle r=5, circumference. Use π=3.14",a:31.4,type:"Geometry"},
+  {q:"Circle r=4, area. Use π=3.14",a:50.24,type:"Geometry"},
+  {q:"Volume of cube side=5",a:125,type:"Geometry"},
+  {q:"Volume of box 4×3×2",a:24,type:"Geometry"},
+  {q:"Parallelogram base=9 height=4, area",a:36,type:"Geometry"},
+  {q:"Area of square side=11",a:121,type:"Geometry"},
+  {q:"Triangle base=12 height=7, area",a:42,type:"Geometry"},
+  {q:"Perimeter of rectangle 12 and 5",a:34,type:"Geometry"},
+  {q:"Circle r=6, area. π=3.14",a:113.04,type:"Geometry"},
+  {q:"Cube side=7 volume",a:343,type:"Geometry"},
+  {q:"Cuboid 5×4×3 volume",a:60,type:"Geometry"},
+  {q:"Parallelogram base=12 height=6 area",a:72,type:"Geometry"},
+  {q:"Trapezoid a=4,b=6,h=5 area",a:25,type:"Geometry"},
+  {q:"Circle r=3 circumference. π=3.14",a:18.84,type:"Geometry"},
+  {q:"Square side=13 perimeter",a:52,type:"Geometry"}
 ];
 const bankLv5 = [
-  {q:"2x + 3 = 11, find x",a:4},
-  {q:"5x - 7 = 13, find x",a:4},
-  {q:"3x + 8 = 20, find x",a:4},
-  {q:"10 - 2x = 4, find x",a:3},
-  {q:"x/4 = 6, find x",a:24},
-  {q:"2(x+1)=10, find x",a:4},
-  {q:"3(x-2)=12, find x",a:6},
-  {q:"x + 2x = 18, find x",a:6},
-  {q:"7x - 2x = 25, find x",a:5},
-  {q:"4 + 3x = 19, find x",a:5},
-  {q:"6x - 5 = 31, find x",a:6},
-  {q:"15 - 3x = 6, find x",a:3},
-  {q:"x/5 = 7, find x",a:35},
-  {q:"4(x-3)=16, find x",a:7},
-  {q:"5x + 2x = 42, find x",a:6},
-  {q:"9 + 4x = 29, find x",a:5},
-  {q:"3(x+4)=24, find x",a:4},
-  {q:"8x - 3x = 40, find x",a:8},
-  {q:"20 - 4x = 8, find x",a:3},
-  {q:"x/3 = 9, find x",a:27}
+  {q:"Solve: 2x + 3 = 11",a:4,type:"Algebra"},
+  {q:"Solve: 5x − 7 = 13",a:4,type:"Algebra"},
+  {q:"Solve: 3x + 8 = 20",a:4,type:"Algebra"},
+  {q:"Solve: 10 − 2x = 4",a:3,type:"Algebra"},
+  {q:"Solve: x/4 = 6",a:24,type:"Algebra"},
+  {q:"Solve: 2(x+1) = 10",a:4,type:"Algebra"},
+  {q:"Solve: 3(x−2) = 12",a:6,type:"Algebra"},
+  {q:"Solve: x + 2x = 18",a:6,type:"Algebra"},
+  {q:"Solve: 7x − 2x = 25",a:5,type:"Algebra"},
+  {q:"Solve: 4 + 3x = 19",a:5,type:"Algebra"},
+  {q:"Solve: 6x − 5 = 31",a:6,type:"Algebra"},
+  {q:"Solve: 15 − 3x = 6",a:3,type:"Algebra"},
+  {q:"Solve: x/5 = 7",a:35,type:"Algebra"},
+  {q:"Solve: 4(x−3) = 16",a:7,type:"Algebra"},
+  {q:"Solve: 5x + 2x = 42",a:6,type:"Algebra"},
+  {q:"Solve: 9 + 4x = 29",a:5,type:"Algebra"},
+  {q:"Solve: 3(x+4) = 24",a:4,type:"Algebra"},
+  {q:"Solve: 8x − 3x = 40",a:8,type:"Algebra"},
+  {q:"Solve: 20 − 4x = 8",a:3,type:"Algebra"},
+  {q:"Solve: x/3 = 9",a:27,type:"Algebra"}
 ];
 const bankLv6 = [
-  {q:"2⁴ = ?",a:16},
-  {q:"5³ = ?",a:125},
-  {q:"3⁵ = ?",a:243},
-  {q:"10⁴ = ?",a:10000},
-  {q:"√49 = ?",a:7},
-  {q:"√144 = ?",a:12},
-  {q:"√100 + √25 = ?",a:15},
-  {q:"√81 - √16 = ?",a:5},
-  {q:"2³ + 3² = ?",a:17},
-  {q:"4² - 2³ = ?",a:8},
-  {q:"4³ = ?",a:64},
-  {q:"2⁶ = ?",a:64},
-  {q:"6² = ?",a:36},
-  {q:"√169 = ?",a:13},
-  {q:"√225 = ?",a:15},
-  {q:"5² + 2⁴ = ?",a:41},
-  {q:"7² - 3³ = ?",a:22},
-  {q:"3⁴ - 5² = ?",a:56},
-  {q:"√64 + √36 = ?",a:14},
-  {q:"√121 - √49 = ?",a:4}
+  {q:"Calculate: 2⁴",a:16,type:"Arithmetic"},
+  {q:"Calculate: 5³",a:125,type:"Arithmetic"},
+  {q:"Calculate: 3⁵",a:243,type:"Arithmetic"},
+  {q:"Calculate: 10⁴",a:10000,type:"Arithmetic"},
+  {q:"Calculate: √49",a:7,type:"Arithmetic"},
+  {q:"Calculate: √144",a:12,type:"Arithmetic"},
+  {q:"√100 + √25 = ?",a:15,type:"Arithmetic"},
+  {q:"√81 − √16 = ?",a:5,type:"Arithmetic"},
+  {q:"2³ + 3² = ?",a:17,type:"Arithmetic"},
+  {q:"4² − 2³ = ?",a:8,type:"Arithmetic"},
+  {q:"Calculate: 4³",a:64,type:"Arithmetic"},
+  {q:"Calculate: 2⁶",a:64,type:"Arithmetic"},
+  {q:"Calculate: 6²",a:36,type:"Arithmetic"},
+  {q:"Calculate: √169",a:13,type:"Arithmetic"},
+  {q:"Calculate: √225",a:15,type:"Arithmetic"},
+  {q:"5² + 2⁴ = ?",a:41,type:"Arithmetic"},
+  {q:"7² − 3³ = ?",a:22,type:"Arithmetic"},
+  {q:"3⁴ − 5² = ?",a:56,type:"Arithmetic"},
+  {q:"√64 + √36 = ?",a:14,type:"Arithmetic"},
+  {q:"√121 − √49 = ?",a:4,type:"Arithmetic"}
 ];
 const bankLv7 = [
-  {q:"Solve |x - 5| = 2, positive answer",a:7},
-  {q:"Solve |x + 3| = 6, positive answer",a:3},
-  {q:"Solve |2x| = 8, positive answer",a:4},
-  {q:"|x-1|=4, largest x",a:5},
-  {q:"|3x-6|=9, positive solution",a:5},
-  {q:"Simplify | -7 |",a:7},
-  {q:"| -12 + 5 | = ?",a:7},
-  {q:"| 3 - 10 | = ?",a:7},
-  {q:"If |x|=9, positive x",a:9},
-  {q:"|2 - 9| + 4 = ?",a:11},
-  {q:"|x - 8| = 3, larger x",a:11},
-  {q:"|4x| = 20, positive x",a:5},
-  {q:"|x + 5| = 7, positive x",a:2},
-  {q:"| -15 | = ?",a:15},
-  {q:"|6 - 14| = ?",a:8},
-  {q:"|2x - 4| = 10, positive x",a:7},
-  {q:"| -3 + 9 | = ?",a:6},
-  {q:"|x - 2| = 10, positive x",a:12},
-  {q:"|5 - 12| + 2 = ?",a:9},
-  {q:"|3x| = 15, positive x",a:5}
+  {q:"Solve |x − 5| = 2, give larger x",a:7,type:"Algebra"},
+  {q:"Solve |x + 3| = 6, give positive x",a:3,type:"Algebra"},
+  {q:"Solve |2x| = 8, give positive x",a:4,type:"Algebra"},
+  {q:"|x−1|=4, largest x = ?",a:5,type:"Algebra"},
+  {q:"|3x−6|=9, positive solution",a:5,type:"Algebra"},
+  {q:"Simplify: | −7 |",a:7,type:"Arithmetic"},
+  {q:"| −12 + 5 | = ?",a:7,type:"Arithmetic"},
+  {q:"| 3 − 10 | = ?",a:7,type:"Arithmetic"},
+  {q:"If |x|=9, positive x = ?",a:9,type:"Algebra"},
+  {q:"|2 − 9| + 4 = ?",a:11,type:"Arithmetic"},
+  {q:"|x − 8| = 3, larger x",a:11,type:"Algebra"},
+  {q:"|4x| = 20, positive x",a:5,type:"Algebra"},
+  {q:"|x + 5| = 7, positive x",a:2,type:"Algebra"},
+  {q:"Simplify: | −15 |",a:15,type:"Arithmetic"},
+  {q:"|6 − 14| = ?",a:8,type:"Arithmetic"},
+  {q:"|2x − 4| = 10, positive x",a:7,type:"Algebra"},
+  {q:"| −3 + 9 | = ?",a:6,type:"Arithmetic"},
+  {q:"|x − 2| = 10, positive x",a:12,type:"Algebra"},
+  {q:"|5 − 12| + 2 = ?",a:9,type:"Arithmetic"},
+  {q:"|3x| = 15, positive x",a:5,type:"Algebra"}
 ];
 const bankLv8 = [
-  {q:"A fair coin flipped, probability of head",a:0.5},
-  {q:"Roll die, probability of 3",a:1/6},
-  {q:"Roll die, probability of odd number",a:0.5},
-  {q:"Roll die, probability >4",a:1/3},
-  {q:"Bag:3 red,2 blue, pick red probability",a:0.6},
-  {q:"Two coins, probability both heads",a:0.25},
-  {q:"Roll two dice, sum=2 probability",a:1/36},
-  {q:"Pick 1 from 1~10, multiple of 2 probability",a:0.5},
-  {q:"Deck 52 cards, pick heart probability",a:0.25},
-  {q:"3 green, 5 yellow, pick green probability",a:3/8},
-  {q:"Roll die, probability of less than 3",a:1/3},
-  {q:"Bag:4 black,6 white, pick white",a:0.6},
-  {q:"Three coins, all heads probability",a:0.125},
-  {q:"Roll die, multiple of 3 probability",a:1/3},
-  {q:"Pick from 1~20, multiple of 5",a:0.2},
-  {q:"Two dice sum=7 probability",a:1/6},
-  {q:"5 red,7 blue pick red probability",a:5/12},
-  {q:"Coin flip twice, at least one head",a:0.75},
-  {q:"Roll die, not 6 probability",a:5/6},
-  {q:"2 orange,8 purple pick orange",a:0.2}
+  {q:"Fair coin flip, probability of head (decimal)",a:0.5,type:"Probability"},
+  {q:"Roll a die, probability of 3 (decimal)",a:1/6,type:"Probability"},
+  {q:"Roll a die, probability of odd number (decimal)",a:0.5,type:"Probability"},
+  {q:"Roll a die, probability >4 (decimal)",a:1/3,type:"Probability"},
+  {q:"3 red 2 blue marbles, pick red probability (decimal)",a:0.6,type:"Probability"},
+  {q:"Two coins flipped, both heads probability (decimal)",a:0.25,type:"Probability"},
+  {q:"Two dice, sum=2 probability (decimal)",a:1/36,type:"Probability"},
+  {q:"1~10 pick one, multiple of 2 probability (decimal)",a:0.5,type:"Probability"},
+  {q:"52-card deck, pick heart probability (decimal)",a:0.25,type:"Probability"},
+  {q:"3 green 5 yellow, pick green probability (decimal)",a:3/8,type:"Probability"},
+  {q:"Roll die, probability less than 3 (decimal)",a:1/3,type:"Probability"},
+  {q:"4 black 6 white marbles, pick white (decimal)",a:0.6,type:"Probability"},
+  {q:"Three coins, all heads probability (decimal)",a:0.125,type:"Probability"},
+  {q:"Roll die, multiple of 3 probability (decimal)",a:1/3,type:"Probability"},
+  {q:"1~20 pick one, multiple of 5 probability (decimal)",a:0.2,type:"Probability"},
+  {q:"Two dice, sum=7 probability (decimal)",a:1/6,type:"Probability"},
+  {q:"5 red 7 blue, pick red probability (decimal)",a:5/12,type:"Probability"},
+  {q:"Coin flip twice, at least one head (decimal)",a:0.75,type:"Probability"},
+  {q:"Roll die, probability of NOT 6 (decimal)",a:5/6,type:"Probability"},
+  {q:"2 orange 8 purple, pick orange (decimal)",a:0.2,type:"Probability"}
 ];
 const bankLv9 = [
-  {q:"Arithmetic sequence 3,7,11,... common difference",a:4},
-  {q:"Sequence 2,9,16,... 6th term",a:37},
-  {q:"Arithmetic a1=5, d=3, 10th term",a:32},
-  {q:"Geometric 2,6,18,... common ratio",a:3},
-  {q:"Geometric 4,12,36,... 4th term",a:108},
-  {q:"Geometric a1=3, r=2, 5th term",a:48},
-  {q:"Sequence 10, 8, 6,... 7th term",a:-2},
-  {q:"Arithmetic 1,4,7, sum first 4 terms",a:22},
-  {q:"Geometric 5,10,20, sum first 3",a:35},
-  {q:"Sequence 12, 6, 3,... ratio",a:0.5},
-  {q:"Arithmetic 4,9,14,... d=?",a:5},
-  {q:"Arithmetic a1=2 d=4, 8th term",a:30},
-  {q:"Geometric 6,18,54 ratio",a:3},
-  {q:"Geometric a1=2 r=4, 4th term",a:128},
-  {q:"Arithmetic 20,17,14 5th term",a:8},
-  {q:"Arithmetic 3,6,9 sum first 5",a:45},
-  {q:"Geometric 8,4,2 ratio",a:0.5},
-  {q:"Geometric 1,5,25 4th term",a:125},
-  {q:"Arithmetic a1=7 d=-2, 6th term",a:-3},
-  {q:"Geometric 4,12,36 sum first3",a:52}
+  {q:"Sequence 3,7,11,... common difference",a:4,type:"Sequence"},
+  {q:"Sequence 2,9,16,... 6th term",a:37,type:"Sequence"},
+  {q:"Arithmetic: a1=5, d=3. 10th term = ?",a:32,type:"Sequence"},
+  {q:"Sequence 2,6,18,... common ratio",a:3,type:"Sequence"},
+  {q:"Geometric: 4,12,36,... 4th term",a:108,type:"Sequence"},
+  {q:"Geometric: a1=3, r=2. 5th term = ?",a:48,type:"Sequence"},
+  {q:"Sequence 10,8,6,... 7th term",a:-2,type:"Sequence"},
+  {q:"Arithmetic 1,4,7. Sum of first 4 terms",a:22,type:"Sequence"},
+  {q:"Geometric 5,10,20. Sum of first 3 terms",a:35,type:"Sequence"},
+  {q:"Sequence 12,6,3,... common ratio",a:0.5,type:"Sequence"},
+  {q:"Sequence 4,9,14,... common difference",a:5,type:"Sequence"},
+  {q:"Arithmetic: a1=2, d=4. 8th term = ?",a:30,type:"Sequence"},
+  {q:"Sequence 6,18,54 common ratio",a:3,type:"Sequence"},
+  {q:"Geometric: a1=2, r=4. 4th term = ?",a:128,type:"Sequence"},
+  {q:"Arithmetic 20,17,14. 5th term",a:8,type:"Sequence"},
+  {q:"Arithmetic 3,6,9. Sum first 5 terms",a:45,type:"Sequence"},
+  {q:"Geometric 8,4,2 common ratio",a:0.5,type:"Sequence"},
+  {q:"Geometric 1,5,25. 4th term",a:125,type:"Sequence"},
+  {q:"Arithmetic: a1=7, d=-2. 6th term",a:-3,type:"Sequence"},
+  {q:"Geometric 4,12,36. Sum first 3 terms",a:52,type:"Sequence"}
 ];
 const bankLv10 = [
-  {q:"x² - 7x +10 =0, sum of roots",a:7},
-  {q:"x² +5x +6 =0, product of roots",a:6},
-  {q:"x² -9 =0, positive root",a:3},
-  {q:"x² -6x +8=0, larger root",a:4},
-  {q:"2x² -10x +8=0, sum roots",a:5},
-  {q:"x² + 3x = 0, non-zero root",a:-3},
-  {q:"x² - 12x +35=0, smaller root",a:5},
-  {q:"3x² -15x +12=0 sum roots",a:5},
-  {q:"x² -25=0 positive root",a:5},
-  {q:"x² - 4x + 3 =0 product roots",a:3},
-  {q:"x² - 8x +12=0 sum roots",a:8},
-  {q:"x² +6x +8=0 product roots",a:8},
-  {q:"x² - 16=0 positive root",a:4},
-  {q:"x² - 9x +14=0 larger root",a:7},
-  {q:"4x² -12x +8=0 sum roots",a:3},
-  {q:"x² - 5x =0 non-zero root",a:5},
-  {q:"x² -11x +24=0 smaller root",a:3},
-  {q:"2x² -6x -8=0 sum roots",a:3},
-  {q:"x² - 49=0 positive root",a:7},
-  {q:"x² +7x +12=0 product roots",a:12}
+  {q:"x² − 7x + 10 = 0. Sum of roots = ?",a:7,type:"Algebra"},
+  {q:"x² + 5x + 6 = 0. Product of roots = ?",a:6,type:"Algebra"},
+  {q:"x² − 9 = 0. Positive root = ?",a:3,type:"Algebra"},
+  {q:"x² − 6x + 8 = 0. Larger root = ?",a:4,type:"Algebra"},
+  {q:"2x² − 10x + 8 = 0. Sum of roots = ?",a:5,type:"Algebra"},
+  {q:"x² + 3x = 0. Non-zero root = ?",a:-3,type:"Algebra"},
+  {q:"x² − 12x + 35 = 0. Smaller root = ?",a:5,type:"Algebra"},
+  {q:"3x² − 15x + 12 = 0. Sum of roots = ?",a:5,type:"Algebra"},
+  {q:"x² − 25 = 0. Positive root = ?",a:5,type:"Algebra"},
+  {q:"x² − 4x + 3 = 0. Product of roots = ?",a:3,type:"Algebra"},
+  {q:"x² − 8x + 12 = 0. Sum of roots = ?",a:8,type:"Algebra"},
+  {q:"x² + 6x + 8 = 0. Product of roots = ?",a:8,type:"Algebra"},
+  {q:"x² − 16 = 0. Positive root = ?",a:4,type:"Algebra"},
+  {q:"x² − 9x + 14 = 0. Larger root = ?",a:7,type:"Algebra"},
+  {q:"4x² − 12x + 8 = 0. Sum of roots = ?",a:3,type:"Algebra"},
+  {q:"x² − 5x = 0. Non-zero root = ?",a:5,type:"Algebra"},
+  {q:"x² − 11x + 24 = 0. Smaller root = ?",a:3,type:"Algebra"},
+  {q:"2x² − 6x − 8 = 0. Sum of roots = ?",a:3,type:"Algebra"},
+  {q:"x² − 49 = 0. Positive root = ?",a:7,type:"Algebra"},
+  {q:"x² + 7x + 12 = 0. Product of roots = ?",a:12,type:"Algebra"}
 ];
 const bankLv11 = [
-  {q:"Slope through (0,0) and (4,8)",a:2},
-  {q:"Slope through (1,3) and (5,11)",a:2},
-  {q:"Slope through (2,5) (4,9)",a:2},
-  {q:"Slope through (0,5) (3,5)",a:0},
-  {q:"Slope through (2,7) (2,10)",a:Infinity},
-  {q:"Line y=3x+2, slope",a:3},
-  {q:"Line y=-2x+5, slope",a:-2},
-  {q:"Line 2y=4x+6 slope",a:2},
-  {q:"Line 3x+y=7 slope",a:-3},
-  {q:"Slope (1,10) (3,4)",a:-3},
-  {q:"Slope (0,2) (5,12)",a:2},
-  {q:"Slope (2,1) (6,13)",a:3},
-  {q:"Slope (1,9) (4,3)",a:-2},
-  {q:"y=5x-1 slope",a:5},
-  {q:"y=-4x+9 slope",a:-4},
-  {q:"4y=8x-12 slope",a:2},
-  {q:"2x+y=9 slope",a:-2},
-  {q:"Slope (0,0) (3,12)",a:4},
-  {q:"Slope (3,5) (7,5)",a:0},
-  {q:"Slope (4,2) (4,8)",a:Infinity}
+  {q:"Slope through (0,0) and (4,8)",a:2,type:"Algebra"},
+  {q:"Slope through (1,3) and (5,11)",a:2,type:"Algebra"},
+  {q:"Slope through (2,5) and (4,9)",a:2,type:"Algebra"},
+  {q:"Slope through (0,5) and (3,5)",a:0,type:"Algebra"},
+  {q:"Line y = 3x + 2. Slope = ?",a:3,type:"Algebra"},
+  {q:"Line y = −2x + 5. Slope = ?",a:-2,type:"Algebra"},
+  {q:"Line 2y = 4x + 6. Slope = ?",a:2,type:"Algebra"},
+  {q:"Line 3x + y = 7. Slope = ?",a:-3,type:"Algebra"},
+  {q:"Slope through (1,10) and (3,4)",a:-3,type:"Algebra"},
+  {q:"Slope through (0,2) and (5,12)",a:2,type:"Algebra"},
+  {q:"Slope through (2,1) and (6,13)",a:3,type:"Algebra"},
+  {q:"Slope through (1,9) and (4,3)",a:-2,type:"Algebra"},
+  {q:"Line y = 5x − 1. Slope = ?",a:5,type:"Algebra"},
+  {q:"Line y = −4x + 9. Slope = ?",a:-4,type:"Algebra"},
+  {q:"Line 4y = 8x − 12. Slope = ?",a:2,type:"Algebra"},
+  {q:"Line 2x + y = 9. Slope = ?",a:-2,type:"Algebra"},
+  {q:"Slope through (0,0) and (3,12)",a:4,type:"Algebra"},
+  {q:"Slope through (3,5) and (7,5)",a:0,type:"Algebra"},
+  {q:"Line y = −x + 4. Slope = ?",a:-1,type:"Algebra"},
+  {q:"Line x + 2y = 6. Slope = ?",a:-0.5,type:"Algebra"}
 ];
 const bankLv12 = [
-  {q:"sin(30°) = ?",a:0.5},
-  {q:"cos(60°) = ?",a:0.5},
-  {q:"sin(90°) = ?",a:1},
-  {q:"cos(0°) = ?",a:1},
-  {q:"tan(45°) = ?",a:1},
-  {q:"sin(0°) = ?",a:0},
-  {q:"cos(90°) = ?",a:0},
-  {q:"tan(30°) ≈ ?",a:0.577},
-  {q:"Right triangle opposite 3 hypotenuse 5, sinθ",a:0.6},
-  {q:"Right triangle adj 4 hyp 5, cosθ",a:0.8},
-  {q:"sin(60°) ≈ ?",a:0.866},
-  {q:"cos(30°) ≈ ?",a:0.866},
-  {q:"tan(60°) ≈ ?",a:1.732},
-  {q:"sin(180°) = ?",a:0},
-  {q:"cos(180°) = ?",a:-1},
-  {q:"Opposite=5 hyp=13 sinθ",a:5/13},
-  {q:"Adjacent=12 hyp=13 cosθ",a:12/13},
-  {q:"tan(0°)=?",a:0},
-  {q:"sin(45°)≈?",a:0.707},
-  {q:"cos(45°)≈?",a:0.707}
+  {q:"sin(30°) = ?",a:0.5,type:"Trigonometry"},
+  {q:"cos(60°) = ?",a:0.5,type:"Trigonometry"},
+  {q:"sin(90°) = ?",a:1,type:"Trigonometry"},
+  {q:"cos(0°) = ?",a:1,type:"Trigonometry"},
+  {q:"tan(45°) = ?",a:1,type:"Trigonometry"},
+  {q:"sin(0°) = ?",a:0,type:"Trigonometry"},
+  {q:"cos(90°) = ?",a:0,type:"Trigonometry"},
+  {q:"tan(30°) ≈ ? (3 decimals)",a:0.577,type:"Trigonometry"},
+  {q:"Right triangle: opposite=3 hypotenuse=5. sinθ = ?",a:0.6,type:"Trigonometry"},
+  {q:"Right triangle: adjacent=4 hypotenuse=5. cosθ = ?",a:0.8,type:"Trigonometry"},
+  {q:"sin(60°) ≈ ? (3 decimals)",a:0.866,type:"Trigonometry"},
+  {q:"cos(30°) ≈ ? (3 decimals)",a:0.866,type:"Trigonometry"},
+  {q:"tan(60°) ≈ ? (3 decimals)",a:1.732,type:"Trigonometry"},
+  {q:"sin(180°) = ?",a:0,type:"Trigonometry"},
+  {q:"cos(180°) = ?",a:-1,type:"Trigonometry"},
+  {q:"Opposite=5 hypotenuse=13. sinθ = ? (decimal)",a:5/13,type:"Trigonometry"},
+  {q:"Adjacent=12 hypotenuse=13. cosθ = ? (decimal)",a:12/13,type:"Trigonometry"},
+  {q:"tan(0°) = ?",a:0,type:"Trigonometry"},
+  {q:"sin(45°) ≈ ? (3 decimals)",a:0.707,type:"Trigonometry"},
+  {q:"cos(45°) ≈ ? (3 decimals)",a:0.707,type:"Trigonometry"}
 ];
 const bankLv13 = [
-  {q:"log₂(16) = ?",a:4},
-  {q:"log₃(27) = ?",a:3},
-  {q:"log₅(25) = ?",a:2},
-  {q:"log₁₀(1000) = ?",a:3},
-  {q:"log₂(1/8) = ?",a:-3},
-  {q:"log₄(64) = ?",a:3},
-  {q:"log₆(6) = ?",a:1},
-  {q:"log₇(1) = ?",a:0},
-  {q:"log₂(32) = ?",a:5},
-  {q:"log₉(81) = ?",a:2},
-  {q:"log₂(64) = ?",a:6},
-  {q:"log₁₀(100) = ?",a:2},
-  {q:"log₃(81) = ?",a:4},
-  {q:"log₅(125) = ?",a:3},
-  {q:"log₄(1/16) = ?",a:-2},
-  {q:"log₈(64) = ?",a:2},
-  {q:"log₁₀(10000) = ?",a:4},
-  {q:"log₃(1/9) = ?",a:-2},
-  {q:"log₁₆(4) = ?",a:0.5},
-  {q:"log₂(1) = ?",a:0}
+  {q:"log₂(16) = ?",a:4,type:"Logarithm"},
+  {q:"log₃(27) = ?",a:3,type:"Logarithm"},
+  {q:"log₅(25) = ?",a:2,type:"Logarithm"},
+  {q:"log₁₀(1000) = ?",a:3,type:"Logarithm"},
+  {q:"log₂(1/8) = ?",a:-3,type:"Logarithm"},
+  {q:"log₄(64) = ?",a:3,type:"Logarithm"},
+  {q:"log₆(6) = ?",a:1,type:"Logarithm"},
+  {q:"log₇(1) = ?",a:0,type:"Logarithm"},
+  {q:"log₂(32) = ?",a:5,type:"Logarithm"},
+  {q:"log₉(81) = ?",a:2,type:"Logarithm"},
+  {q:"log₂(64) = ?",a:6,type:"Logarithm"},
+  {q:"log₁₀(100) = ?",a:2,type:"Logarithm"},
+  {q:"log₃(81) = ?",a:4,type:"Logarithm"},
+  {q:"log₅(125) = ?",a:3,type:"Logarithm"},
+  {q:"log₄(1/16) = ?",a:-2,type:"Logarithm"},
+  {q:"log₈(64) = ?",a:2,type:"Logarithm"},
+  {q:"log₁₀(10000) = ?",a:4,type:"Logarithm"},
+  {q:"log₃(1/9) = ?",a:-2,type:"Logarithm"},
+  {q:"log₁₆(4) = ?",a:0.5,type:"Logarithm"},
+  {q:"log₂(1) = ?",a:0,type:"Logarithm"}
 ];
 const bankLv14 = [
-  {q:"Derivative of x³",a:3},
-  {q:"Derivative of 5x²",a:10},
-  {q:"Derivative of x⁴",a:4},
-  {q:"Derivative of 7x",a:7},
-  {q:"Derivative of constant 9",a:0},
-  {q:"Derivative of 2x³",a:6},
-  {q:"Derivative of x⁵",a:5},
-  {q:"Derivative of -3x²",a:-6},
-  {q:"Derivative of x^(1/2)",a:0.5},
-  {q:"Derivative of 4x³",a:12},
-  {q:"Derivative of 6x⁴",a:24},
-  {q:"Derivative of -8x",a:-8},
-  {q:"Derivative of x⁶",a:6},
-  {q:"Derivative of 10x³",a:30},
-  {q:"Derivative of -x²",a:-2},
-  {q:"Derivative of 12",a:0},
-  {q:"Derivative of 3x⁵",a:15},
-  {q:"Derivative of x^(-1)",a:-1},
-  {q:"Derivative of 7x⁴",a:28},
-  {q:"Derivative of -4x³",a:-12}
+  {q:"Derivative of x³, coefficient of x²",a:3,type:"Calculus"},
+  {q:"Derivative of 5x², coefficient of x",a:10,type:"Calculus"},
+  {q:"Derivative of x⁴, coefficient of x³",a:4,type:"Calculus"},
+  {q:"Derivative of 7x",a:7,type:"Calculus"},
+  {q:"Derivative of constant 9",a:0,type:"Calculus"},
+  {q:"Derivative of 2x³, coefficient of x²",a:6,type:"Calculus"},
+  {q:"Derivative of x⁵, coefficient of x⁴",a:5,type:"Calculus"},
+  {q:"Derivative of −3x², coefficient of x",a:-6,type:"Calculus"},
+  {q:"Derivative of x^(1/2), coefficient",a:0.5,type:"Calculus"},
+  {q:"Derivative of 4x³, coefficient of x²",a:12,type:"Calculus"},
+  {q:"Derivative of 6x⁴, coefficient of x³",a:24,type:"Calculus"},
+  {q:"Derivative of −8x",a:-8,type:"Calculus"},
+  {q:"Derivative of x⁶, coefficient of x⁵",a:6,type:"Calculus"},
+  {q:"Derivative of 10x³, coefficient of x²",a:30,type:"Calculus"},
+  {q:"Derivative of −x², coefficient of x",a:-2,type:"Calculus"},
+  {q:"Derivative of 12",a:0,type:"Calculus"},
+  {q:"Derivative of 3x⁵, coefficient of x⁴",a:15,type:"Calculus"},
+  {q:"Derivative of x^(-1), coefficient of x^(-2)",a:-1,type:"Calculus"},
+  {q:"Derivative of 7x⁴, coefficient of x³",a:28,type:"Calculus"},
+  {q:"Derivative of −4x³, coefficient of x²",a:-12,type:"Calculus"}
 ];
 const bankLv15 = [
-  {q:"C(5,2) = ?",a:10},
-  {q:"C(6,3) = ?",a:20},
-  {q:"C(4,1) = ?",a:4},
-  {q:"C(7,2) = ?",a:21},
-  {q:"C(10,2) = ?",a:45},
-  {q:"P(4,2) = ?",a:12},
-  {q:"P(5,3) = ?",a:60},
-  {q:"P(3,3) = ?",a:6},
-  {q:"C(8,4) = ?",a:70},
-  {q:"P(6,2) = ?",a:30},
-  {q:"C(9,3) = ?",a:84},
-  {q:"C(7,3) = ?",a:35},
-  {q:"P(7,2) = ?",a:42},
-  {q:"P(6,3) = ?",a:120},
-  {q:"C(10,3) = ?",a:120},
-  {q:"C(4,4) = ?",a:1},
-  {q:"P(5,2) = ?",a:20},
-  {q:"C(9,2) = ?",a:36},
-  {q:"P(7,3) = ?",a:210},
-  {q:"C(6,2) = ?",a:15}
+  {q:"Combination C(5,2) = ?",a:10,type:"Combinatorics"},
+  {q:"Combination C(6,3) = ?",a:20,type:"Combinatorics"},
+  {q:"Combination C(4,1) = ?",a:4,type:"Combinatorics"},
+  {q:"Combination C(7,2) = ?",a:21,type:"Combinatorics"},
+  {q:"Combination C(10,2) = ?",a:45,type:"Combinatorics"},
+  {q:"Permutation P(4,2) = ?",a:12,type:"Combinatorics"},
+  {q:"Permutation P(5,3) = ?",a:60,type:"Combinatorics"},
+  {q:"Permutation P(3,3) = ?",a:6,type:"Combinatorics"},
+  {q:"Combination C(8,4) = ?",a:70,type:"Combinatorics"},
+  {q:"Permutation P(6,2) = ?",a:30,type:"Combinatorics"},
+  {q:"Combination C(9,3) = ?",a:84,type:"Combinatorics"},
+  {q:"Combination C(7,3) = ?",a:35,type:"Combinatorics"},
+  {q:"Permutation P(7,2) = ?",a:42,type:"Combinatorics"},
+  {q:"Permutation P(6,3) = ?",a:120,type:"Combinatorics"},
+  {q:"Combination C(10,3) = ?",a:120,type:"Combinatorics"},
+  {q:"Combination C(4,4) = ?",a:1,type:"Combinatorics"},
+  {q:"Permutation P(5,2) = ?",a:20,type:"Combinatorics"},
+  {q:"Combination C(9,2) = ?",a:36,type:"Combinatorics"},
+  {q:"Permutation P(7,3) = ?",a:210,type:"Combinatorics"},
+  {q:"Combination C(6,2) = ?",a:15,type:"Combinatorics"}
 ];
 const bankLv16 = [
-  {q:"Expand (x+2)², coefficient of x",a:4},
-  {q:"Expand (x-3)², coefficient of x",a:-6},
-  {q:"(x+4)(x+1), coefficient of x",a:5},
-  {q:"(x-2)(x+5), coefficient of x",a:3},
-  {q:"(x+3)(x-3), coefficient of x",a:0},
-  {q:"(2x+1)², coefficient x",a:4},
-  {q:"(3x-2)² coefficient x",a:-12},
-  {q:"(x+5)(x-2), constant term",a:-10},
-  {q:"(2x+3)(x+1), coefficient x",a:5},
-  {q:"(x-4)(x-1), coefficient x",a:-5},
-  {q:"(x+5)² coefficient x",a:10},
-  {q:"(x-6)² coefficient x",a:-12},
-  {q:"(x+2)(x+7) coefficient x",a:9},
-  {q:"(x-5)(x+3) coefficient x",a:-2},
-  {q:"(4x-1)² coefficient x",a:-8},
-  {q:"(x+6)(x-4) constant term",a:-24},
-  {q:"(3x+2)(x+2) coefficient x",a:8},
-  {q:"(x-7)(x-2) coefficient x",a:-9},
-  {q:"(2x-3)² coefficient x",a:-12},
-  {q:"(x+1)(x-8) coefficient x",a:-7}
+  {q:"Expand (x+2)². Coefficient of x = ?",a:4,type:"Algebra"},
+  {q:"Expand (x−3)². Coefficient of x = ?",a:-6,type:"Algebra"},
+  {q:"(x+4)(x+1). Coefficient of x = ?",a:5,type:"Algebra"},
+  {q:"(x−2)(x+5). Coefficient of x = ?",a:3,type:"Algebra"},
+  {q:"(x+3)(x−3). Coefficient of x = ?",a:0,type:"Algebra"},
+  {q:"(2x+1)². Coefficient of x = ?",a:4,type:"Algebra"},
+  {q:"(3x−2)². Coefficient of x = ?",a:-12,type:"Algebra"},
+  {q:"(x+5)(x−2). Constant term = ?",a:-10,type:"Algebra"},
+  {q:"(2x+3)(x+1). Coefficient of x = ?",a:5,type:"Algebra"},
+  {q:"(x−4)(x−1). Coefficient of x = ?",a:-5,type:"Algebra"},
+  {q:"(x+5)². Coefficient of x = ?",a:10,type:"Algebra"},
+  {q:"(x−6)². Coefficient of x = ?",a:-12,type:"Algebra"},
+  {q:"(x+2)(x+7). Coefficient of x = ?",a:9,type:"Algebra"},
+  {q:"(x−5)(x+3). Coefficient of x = ?",a:-2,type:"Algebra"},
+  {q:"(4x−1)². Coefficient of x = ?",a:-8,type:"Algebra"},
+  {q:"(x+6)(x−4). Constant term = ?",a:-24,type:"Algebra"},
+  {q:"(3x+2)(x+2). Coefficient of x = ?",a:8,type:"Algebra"},
+  {q:"(x−7)(x−2). Coefficient of x = ?",a:-9,type:"Algebra"},
+  {q:"(2x−3)². Coefficient of x = ?",a:-12,type:"Algebra"},
+  {q:"(x+1)(x−8). Coefficient of x = ?",a:-7,type:"Algebra"}
 ];
 const bankLv17 = [
-  {q:"Solve 2x + y = 7, x=3, y=?",a:1},
-  {q:"3x - y = 5, x=2, y=?",a:1},
-  {q:"2x+3y=13, x=2,y=?",a:3},
-  {q:"x+y=9, x-y=3, x=?",a:6},
-  {q:"x+y=10, x-y=4, y=?",a:3},
-  {q:"2x+y=11, x-y=1, x=?",a:4},
-  {q:"3x+2y=19, x=3,y=?",a:5},
-  {q:"x+2y=8, x=4,y=?",a:2},
-  {q:"4x-y=7, x=2,y=?",a:1},
-  {q:"2x - y = 3, x+y=6, x=?",a:3},
-  {q:"x+3y=15, x=6,y=?",a:3},
-  {q:"5x - y = 14, x=3,y=?",a:1},
-  {q:"3x+y=14, x-y=2, x=?",a:4},
-  {q:"2x+5y=24, x=2,y=?",a:4},
-  {q:"x+y=12, x-y=8, y=?",a:2},
-  {q:"4x+3y=25, x=4,y=?",a:3},
-  {q:"x-2y=1, x+y=7, y=?",a:2},
-  {q:"3x - 2y = 8, x=4,y=?",a:2},
-  {q:"5x+2y=21, x=3,y=?",a:3},
-  {q:"x+y=14, x-y=6, x=?",a:10}
+  {q:"2x + y = 7, x=3. y = ?",a:1,type:"Algebra"},
+  {q:"3x − y = 5, x=2. y = ?",a:1,type:"Algebra"},
+  {q:"2x + 3y = 13, x=2. y = ?",a:3,type:"Algebra"},
+  {q:"x + y = 9, x − y = 3. x = ?",a:6,type:"Algebra"},
+  {q:"x + y = 10, x − y = 4. y = ?",a:3,type:"Algebra"},
+  {q:"2x + y = 11, x − y = 1. x = ?",a:4,type:"Algebra"},
+  {q:"3x + 2y = 19, x=3. y = ?",a:5,type:"Algebra"},
+  {q:"x + 2y = 8, x=4. y = ?",a:2,type:"Algebra"},
+  {q:"4x − y = 7, x=2. y = ?",a:1,type:"Algebra"},
+  {q:"2x − y = 3, x + y = 6. x = ?",a:3,type:"Algebra"},
+  {q:"x + 3y = 15, x=6. y = ?",a:3,type:"Algebra"},
+  {q:"5x − y = 14, x=3. y = ?",a:1,type:"Algebra"},
+  {q:"3x + y = 14, x − y = 2. x = ?",a:4,type:"Algebra"},
+  {q:"2x + 5y = 24, x=2. y = ?",a:4,type:"Algebra"},
+  {q:"x + y = 12, x − y = 8. y = ?",a:2,type:"Algebra"},
+  {q:"4x + 3y = 25, x=4. y = ?",a:3,type:"Algebra"},
+  {q:"x − 2y = 1, x + y = 7. y = ?",a:2,type:"Algebra"},
+  {q:"3x − 2y = 8, x=4. y = ?",a:2,type:"Algebra"},
+  {q:"5x + 2y = 21, x=3. y = ?",a:3,type:"Algebra"},
+  {q:"x + y = 14, x − y = 6. x = ?",a:10,type:"Algebra"}
 ];
 const bankLv18 = [
-  {q:"Simplify √48 = a√3, find a",a:4},
-  {q:"Simplify √75 = a√3, find a",a:5},
-  {q:"Simplify √20 = a√5, find a",a:2},
-  {q:"√12 + √27 = a√3, find a",a:5},
-  {q:"√50 - √18 = a√2, find a",a:2},
-  {q:"√2 × √8 = ?",a:4},
-  {q:"√3 × √12 = ?",a:6},
-  {q:"√72 = a√2 find a",a:6},
-  {q:"√18 + √32 = a√2 find a",a:7},
-  {q:"√27 × √3 = ?",a:9},
-  {q:"√125 = a√5 find a",a:5},
-  {q:"√28 = a√7 find a",a:2},
-  {q:"√45 + √20 = a√5 find a",a:5},
-  {q:"√98 - √32 = a√2 find a",a:3},
-  {q:"√5 × √20 = ?",a:10},
-  {q:"√6 × √24 = ?",a:12},
-  {q:"√24 = a√6 find a",a:2},
-  {q:"√54 = a√6 find a",a:3},
-  {q:"√12 + √48 = a√3 find a",a:6},
-  {q:"√8 × √18 = ?",a:12}
+  {q:"√48 = a√3. Find a",a:4,type:"Arithmetic"},
+  {q:"√75 = a√3. Find a",a:5,type:"Arithmetic"},
+  {q:"√20 = a√5. Find a",a:2,type:"Arithmetic"},
+  {q:"√12 + √27 = a√3. Find a",a:5,type:"Arithmetic"},
+  {q:"√50 − √18 = a√2. Find a",a:2,type:"Arithmetic"},
+  {q:"√2 × √8 = ?",a:4,type:"Arithmetic"},
+  {q:"√3 × √12 = ?",a:6,type:"Arithmetic"},
+  {q:"√72 = a√2. Find a",a:6,type:"Arithmetic"},
+  {q:"√18 + √32 = a√2. Find a",a:7,type:"Arithmetic"},
+  {q:"√27 × √3 = ?",a:9,type:"Arithmetic"},
+  {q:"√125 = a√5. Find a",a:5,type:"Arithmetic"},
+  {q:"√28 = a√7. Find a",a:2,type:"Arithmetic"},
+  {q:"√45 + √20 = a√5. Find a",a:5,type:"Arithmetic"},
+  {q:"√98 − √32 = a√2. Find a",a:3,type:"Arithmetic"},
+  {q:"√5 × √20 = ?",a:10,type:"Arithmetic"},
+  {q:"√6 × √24 = ?",a:12,type:"Arithmetic"},
+  {q:"√24 = a√6. Find a",a:2,type:"Arithmetic"},
+  {q:"√54 = a√6. Find a",a:3,type:"Arithmetic"},
+  {q:"√12 + √48 = a√3. Find a",a:6,type:"Arithmetic"},
+  {q:"√8 × √18 = ?",a:12,type:"Arithmetic"}
 ];
 const bankLv19 = [
-  {q:"Mean: 2,4,6,8,10",a:6},
-  {q:"Median: 1,3,5,7,9",a:5},
-  {q:"Mean: 10,20,30,40",a:25},
-  {q:"Median: 2,5,7,9,12",a:7},
-  {q:"Range: 3,7,12,15",a:12},
-  {q:"Mean: 5,5,8,12",a:7.5},
-  {q:"Median: 4,1,9,3,6",a:4},
-  {q:"Range: 22,5,14,30",a:25},
-  {q:"Mean: 0,4,8,12",a:6},
-  {q:"Median: 10,2,18,7",a:8.5},
-  {q:"Mean: 3,6,9,12,15",a:9},
-  {q:"Median: 2,4,7,11,15",a:7},
-  {q:"Range: 1,9,13,21",a:20},
-  {q:"Mean: 7,9,11,13",a:10},
-  {q:"Median: 5,1,8,3,10",a:5},
-  {q:"Range: 4,18,9,25",a:21},
-  {q:"Mean: 12,14,16,18",a:15},
-  {q:"Median: 3,7,12,16",a:9.5},
-  {q:"Mean: 1,3,5,7,9,11",a:6},
-  {q:"Range: 11,3,19,7",a:16}
+  {q:"Mean of 2,4,6,8,10",a:6,type:"Statistics"},
+  {q:"Median of 1,3,5,7,9",a:5,type:"Statistics"},
+  {q:"Mean of 10,20,30,40",a:25,type:"Statistics"},
+  {q:"Median of 2,5,7,9,12",a:7,type:"Statistics"},
+  {q:"Range of 3,7,12,15",a:12,type:"Statistics"},
+  {q:"Mean of 5,5,8,12",a:7.5,type:"Statistics"},
+  {q:"Median of 4,1,9,3,6",a:4,type:"Statistics"},
+  {q:"Range of 22,5,14,30",a:25,type:"Statistics"},
+  {q:"Mean of 0,4,8,12",a:6,type:"Statistics"},
+  {q:"Median of 10,2,18,7",a:8.5,type:"Statistics"},
+  {q:"Mean of 3,6,9,12,15",a:9,type:"Statistics"},
+  {q:"Median of 2,4,7,11,15",a:7,type:"Statistics"},
+  {q:"Range of 1,9,13,21",a:20,type:"Statistics"},
+  {q:"Mean of 7,9,11,13",a:10,type:"Statistics"},
+  {q:"Median of 5,1,8,3,10",a:5,type:"Statistics"},
+  {q:"Range of 4,18,9,25",a:21,type:"Statistics"},
+  {q:"Mean of 12,14,16,18",a:15,type:"Statistics"},
+  {q:"Median of 3,7,12,16",a:9.5,type:"Statistics"},
+  {q:"Mean of 1,3,5,7,9,11",a:6,type:"Statistics"},
+  {q:"Range of 11,3,19,7",a:16,type:"Statistics"}
 ];
 const bankLv20 = [
-  {q:"Integral of 2x dx",a:1},
-  {q:"Integral of x² dx coefficient of x³",a:1/3},
-  {q:"Integral of 5 dx",a:5},
-  {q:"Integral of 4x³ dx coefficient x⁴",a:1},
-  {q:"Integral of -3x² dx coefficient x³",a:-1},
-  {q:"Evaluate ∫ from 0 to 2 of 2x dx",a:4},
-  {q:"Evaluate ∫ from 0 to 3 of x dx",a:4.5},
-  {q:"Integral of 6x dx coefficient x²",a:3},
-  {q:"Integral of x⁰ dx",a:1},
-  {q:"∫₀¹ 3x² dx = ?",a:1},
-  {q:"Integral of 8x³ dx coefficient x⁴",a:2},
-  {q:"∫₀⁴ x dx = ?",a:8},
-  {q:"Integral of -6x dx coefficient x²",a:-3},
-  {q:"∫₀² 3x² dx = ?",a:8},
-  {q:"Integral of 10x dx coefficient x²",a:5},
-  {q:"∫₀⁵ 2x dx = ?",a:25},
-  {q:"Integral of x⁷ dx coefficient x⁸",a:1/8},
-  {q:"∫₀³ 2x dx = ?",a:9},
-  {q:"Integral of -4x³ dx coefficient x⁴",a:-1},
-  {q:"∫₀² 6x dx = ?",a:12}
+  {q:"∫2x dx, coefficient of x²",a:1,type:"Calculus"},
+  {q:"∫x² dx, coefficient of x³",a:1/3,type:"Calculus"},
+  {q:"∫5 dx = ?x + C",a:5,type:"Calculus"},
+  {q:"∫4x³ dx, coefficient of x⁴",a:1,type:"Calculus"},
+  {q:"∫−3x² dx, coefficient of x³",a:-1,type:"Calculus"},
+  {q:"∫₀² 2x dx = ?",a:4,type:"Calculus"},
+  {q:"∫₀³ x dx = ?",a:4.5,type:"Calculus"},
+  {q:"∫6x dx, coefficient of x²",a:3,type:"Calculus"},
+  {q:"∫x⁰ dx = ?x + C",a:1,type:"Calculus"},
+  {q:"∫₀¹ 3x² dx = ?",a:1,type:"Calculus"},
+  {q:"∫8x³ dx, coefficient of x⁴",a:2,type:"Calculus"},
+  {q:"∫₀⁴ x dx = ?",a:8,type:"Calculus"},
+  {q:"∫−6x dx, coefficient of x²",a:-3,type:"Calculus"},
+  {q:"∫₀² 3x² dx = ?",a:8,type:"Calculus"},
+  {q:"∫10x dx, coefficient of x²",a:5,type:"Calculus"},
+  {q:"∫₀⁵ 2x dx = ?",a:25,type:"Calculus"},
+  {q:"∫x⁷ dx, coefficient of x⁸",a:1/8,type:"Calculus"},
+  {q:"∫₀³ 2x dx = ?",a:9,type:"Calculus"},
+  {q:"∫−4x³ dx, coefficient of x⁴",a:-1,type:"Calculus"},
+  {q:"∫₀² 6x dx = ?",a:12,type:"Calculus"}
 ];
 
 const allBanks = [
@@ -541,166 +808,238 @@ const allBanks = [
   bankLv16,bankLv17,bankLv18,bankLv19,bankLv20
 ];
 
-let score = 0;
-let level = 1;
-let cntCorrect = 0;
-let cntWrong = 0;
-let currentQ = null;
+/* ========== 游戏状态 ========== */
+let players=[],qCount=0;
+const TOTAL_Q=20;
+let currentQ=null,answered=false;
 const MAX_LEVEL = 20;
 
-const menu = document.getElementById("mainMenu");
-const quizBox = document.getElementById("quizBox");
-const qDom = document.getElementById("question");
-const ansInput = document.getElementById("ansInput");
-const feedbackDom = document.getElementById("feedback");
-const scoreDom = document.getElementById("score");
-const levelDom = document.getElementById("level");
-const cDom = document.getElementById("cntCorrect");
-const wDom = document.getElementById("cntWrong");
-const egg67Container = document.getElementById("egg67Container");
-
 const EGG_TEXT = "Anton is handsome";
+const EGG_67 = "67";
 
-// 67特效函数
+/* ========== 67特效 ========== */
 function trigger67Effect(){
-  for(let i=0;i<60;i++){
-    const span = document.createElement("span");
+  const container = $('egg67Container');
+  for(let i=0;i<67;i++){
+    const span = document.createElement("div");
     span.className = "egg67-text";
     span.innerText = "67";
     span.style.left = Math.random()*100 + "vw";
     span.style.top = Math.random()*100 + "vh";
-    span.style.transform = `rotate(${Math.random()*360}deg)`;
-    span.style.opacity = 1;
-    egg67Container.appendChild(span);
-    // 淡出动画
+    span.style.transform = `rotate(${Math.random()*360}deg) scale(0)`;
+    span.style.opacity = 0;
+    container.appendChild(span);
+
+    // 弹出+淡出动画
     setTimeout(()=>{
-      span.style.transition = "opacity 1.8s";
+      span.style.transition = "all 1.2s cubic-bezier(.22,1,.36,1)";
+      span.style.transform = `rotate(${Math.random()*360}deg) scale(1)`;
+      span.style.opacity = 1;
+    }, i*20);
+    setTimeout(()=>{
       span.style.opacity = 0;
-    }, 100);
-    setTimeout(()=>span.remove(),2000);
+      span.style.transform = `rotate(${Math.random()*360}deg) scale(1.4)`;
+    }, 1200 + i*20);
+    setTimeout(()=>span.remove(), 2500 + i*20);
   }
 }
 
-function startSingle(){
-  score=0;level=1;cntCorrect=0;cntWrong=0;
-  updateUI();
-  menu.style.display="none";
-  quizBox.style.display="block";
+/* ========== 页面切换 ========== */
+function show(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
+  if(soundOn) sfxScreenTransition();
+}
+function goMenu(){stopBGM();show('menuScreen')}
+
+/* ========== 单人模式 ========== */
+function startSolo(){
+  sfxClick();
+  players=[{name:'You',score:0,lv:1,correct:0,wrong:0,_lastCorrect:true}];
+  qCount=0;
+  show('gameScreen');
+  $('modeTag').textContent='Solo Mode · Adaptive Difficulty';
+  renderScoreboards();
   nextQuestion();
+  startBGM();
+}
+
+/* ========== 游戏逻辑 ========== */
+function renderScoreboards(){
+  const sb=$('scoreboards');sb.innerHTML='';
+  players.forEach((p)=>{
+    const d=document.createElement('div');
+    d.className='sb';
+    d.innerHTML=`<div class="sb-name">${p.name}</div><div class="sb-score">${p.score}</div><div class="sb-lv">Lv ${p.lv}</div>`;
+    sb.appendChild(d);
+  });
+  $('progressFill').style.width=(qCount/TOTAL_Q*100)+'%';
+  $('progressText').textContent=`Question ${qCount} / ${TOTAL_Q}`;
 }
 
 function nextQuestion(){
-  feedbackDom.textContent="";
-  const pool = allBanks[level-1];
-  const idx = Math.floor(Math.random() * pool.length);
-  currentQ = pool[idx];
-  qDom.textContent = currentQ.q;
-  ansInput.value="";
-  ansInput.focus();
+  answered=false;
+  $('submitBtn').style.display='';$('nextBtn').style.display='none';
+  $('feedback').className='fb';
+  $('answerInput').value='';$('answerInput').disabled=false;$('answerInput').focus();
+  const p=players[0];
+  if(qCount>0){
+    const prev=p._lastCorrect;
+    const oldLv=p.lv;
+    if(prev)p.lv=Math.min(p.lv+1,MAX_LEVEL);
+    else p.lv=Math.max(p.lv-1,1);
+    if(p.lv>oldLv)sfxLevelUp();
+    else if(p.lv<oldLv)sfxLevelDown();
+  }
+  const pool = allBanks[p.lv-1];
+  currentQ = pick(pool);
+  $('qText').textContent = currentQ.q;
+  const tags=$('tags');tags.innerHTML='';
+  const typeMap = {
+    "Arithmetic":"tag-arithmetic",
+    "Algebra":"tag-algebra",
+    "Fraction":"tag-frac",
+    "Percent":"tag-percent",
+    "Ratio":"tag-percent",
+    "Geometry":"tag-geo",
+    "Probability":"tag-prob",
+    "Sequence":"tag-algebra",
+    "Trigonometry":"tag-trig",
+    "Logarithm":"tag-algebra",
+    "Calculus":"tag-calc",
+    "Combinatorics":"tag-prob",
+    "Statistics":"tag-geo"
+  };
+  const tagClass = typeMap[currentQ.type] || "tag-diff";
+  tags.innerHTML=`<span class="tag ${tagClass}">${currentQ.type}</span><span class="tag tag-diff">Lv ${p.lv}</span>`;
+  renderScoreboards();
 }
 
 function submitAnswer(){
-  const userStr = ansInput.value.trim();
-  // Anton彩蛋
+  if(answered)return;
+  const userStr = $('answerInput').value.trim();
+
+  // ===== 核心修改：禁止空提交 =====
+  if(userStr === ""){
+    const fb=$('feedback');
+    fb.className = "fb show wrong";
+    fb.textContent = "⚠️ Please enter an answer";
+    $('answerInput').focus();
+    return;
+  }
+
+  // Anton彩蛋：直接判对
   if(userStr === EGG_TEXT){
-    feedbackDom.textContent = "✅ Correct! 🎉";
-    feedbackDom.className = "correct";
-    score += 10;
-    cntCorrect++;
-    checkLevelUp();
-    updateUI();
-    setTimeout(nextQuestion,900);
+    answered=true;
+    $('answerInput').disabled=true;
+    $('submitBtn').style.display='none';$('nextBtn').style.display='';
+    const p=players[0];
+    p.score+=10*p.lv;p.correct++;p._lastCorrect=true;
+    const fb=$('feedback');
+    fb.className='fb show correct';
+    fb.innerHTML = `Correct! 🎉 Secret bonus! (+${10*p.lv})`;
+    sfxCorrect();
+    qCount++;
+    renderScoreboards();
+    if(qCount>=TOTAL_Q){setTimeout(showResult,1400);return;}
     return;
   }
-  // 67彩蛋：判错，但是播放特效
-  if(userStr === "67"){
+
+  // 67彩蛋：判错 + 全屏特效
+  if(userStr === EGG_67){
+    answered=true;
     trigger67Effect();
-    feedbackDom.textContent = "❌ Wrong! Answer: " + currentQ.a;
-    feedbackDom.className = "wrong";
-    cntWrong++;
-    checkLevelUp();
-    updateUI();
-    setTimeout(nextQuestion,900);
+    $('answerInput').disabled=true;
+    $('submitBtn').style.display='none';$('nextBtn').style.display='';
+    const p=players[0];
+    p.wrong++;p._lastCorrect=false;
+    const fb=$('feedback');
+    fb.className='fb show wrong';
+    fb.innerHTML = `Wrong! Answer: ${fmt(currentQ.answer)}`;
+    sfxWrong();
+    qCount++;
+    renderScoreboards();
+    if(qCount>=TOTAL_Q){setTimeout(showResult,1400);return;}
     return;
   }
 
-  const userAns = parseFloat(userStr);
-  const realAns = currentQ.a;
-  if(isNaN(userAns)){
-    feedbackDom.textContent="❌ Invalid number";
-    feedbackDom.className="wrong";
+  // 正常数字判分
+  const val = parseFloat(userStr);
+  if(isNaN(val)){
+    const fb=$('feedback');
+    fb.className = "fb show wrong";
+    fb.textContent = "❌ Invalid answer";
+    $('answerInput').focus();
     return;
   }
-  if(Math.abs(userAns - realAns) < 0.001){
-    feedbackDom.textContent = "✅ Correct!";
-    feedbackDom.className = "correct";
-    score += 10;
-    cntCorrect++;
+
+  answered=true;
+  $('answerInput').disabled=true;
+  $('submitBtn').style.display='none';$('nextBtn').style.display='';
+  const p=players[0];
+  const correct=Math.abs(val-currentQ.a)<0.001;
+  const fb=$('feedback');
+  if(correct){
+    p.score+=10*p.lv;p.correct++;p._lastCorrect=true;
+    const nextLv=Math.min(p.lv+1,MAX_LEVEL);
+    fb.className='fb show correct';
+    fb.innerHTML=`Correct! &nbsp; Lv ${p.lv} → ${nextLv} &nbsp; (+${10*p.lv})`;
+    sfxCorrect();
   }else{
-    feedbackDom.textContent = `❌ Wrong! Answer: ${realAns}`;
-    feedbackDom.className = "wrong";
-    cntWrong++;
+    p.wrong++;p._lastCorrect=false;
+    const nextLv=Math.max(p.lv-1,1);
+    fb.className='fb show wrong';
+    fb.innerHTML=`Wrong! &nbsp; Answer: ${fmt(currentQ.a)}<br>Lv ${p.lv} → ${nextLv}`;
+    sfxWrong();
   }
-  checkLevelUp();
-  updateUI();
-  setTimeout(nextQuestion,900);
+  qCount++;
+  renderScoreboards();
+
+  if(qCount>=TOTAL_Q){
+    setTimeout(showResult,1400);
+    return;
+  }
 }
 
-function checkLevelUp(){
-  const newLv = Math.floor(cntCorrect / 5) + 1;
-  if(newLv > MAX_LEVEL) level = MAX_LEVEL;
-  else level = newLv;
-}
-function updateUI(){
-  scoreDom.textContent=score;
-  levelDom.textContent=level;
-  cDom.textContent=cntCorrect;
-  wDom.textContent=cntWrong;
-}
-function backMenu(){
-  quizBox.style.display="none";
-  menu.style.display="flex";
-}
-ansInput.addEventListener("keydown",e=>{
-  if(e.key==="Enter") submitAnswer();
-})
-
-// 粒子背景
-const canvas = document.createElement("canvas");
-canvas.id="particles";
-document.body.prepend(canvas);
-const ctx = canvas.getContext("2d");
-let w,h;
-function resize(){
-  w=canvas.width=innerWidth;
-  h=canvas.height=innerHeight;
-}
-resize();
-window.addEventListener("resize",resize);
-const particles = [];
-for(let i=0;i<70;i++){
-  particles.push({
-    x:Math.random()*w,y:Math.random()*h,
-    r:Math.random()*2+0.4,
-    vx:(Math.random()-0.5)*0.55,
-    vy:(Math.random()-0.5)*0.55
-  })
-}
-function draw(){
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle="#ffffff22";
-  for(let p of particles){
-    p.x += p.vx;
-    p.y += p.vy;
-    if(p.x<0||p.x>w)p.vx*=-1;
-    if(p.y<0||p.y>h)p.vy*=-1;
-    ctx.beginPath();
-    ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
-    ctx.fill();
+document.addEventListener('keydown',e=>{
+  if(e.key==='Enter'&&$('gameScreen').classList.contains('active')){
+    if(!answered)submitAnswer();
+    else if($('nextBtn').style.display!=='none')nextQuestion();
   }
-  requestAnimationFrame(draw);
+});
+
+/* ========== 结算页面 ========== */
+function showResult(){
+  stopBGM();show('resultScreen');
+  const rc=$('resultCard');let html='<h2>🏁 Game Over</h2>';
+  const p=players[0];
+  const acc=p.correct+p.wrong?Math.round(p.correct/(p.correct+p.wrong)*100):0;
+  html+=`<div class="winner">Great job, ${p.name}!</div>`;
+  html+=`<div class="final-scores"><div class="final-sb winner-box"><div class="fs-rank">#1</div><div class="fs-name">${p.name}</div><div class="fs-score">${p.score}</div></div></div>`;
+  html+=`<div class="detail">✅ ${p.correct} &nbsp; ❌ ${p.wrong} &nbsp; Accuracy: ${acc}%<br>Final Level: ${p.lv}</div>`;
+
+  if(p.score > TOTAL_Q*5) sfxVictory();
+  else sfxDefeat();
+
+  html+=`<div class="actions"><button class="btn btn-primary" onclick="goMenu()">Back to Menu</button><button class="btn btn-secondary" onclick="startSolo()">Play Again</button></div>`;
+  rc.innerHTML=html;
 }
-draw();
+
+// 生成浮动粒子
+(function(){
+  const container=document.getElementById('particles');
+  if(!container)return;
+  const count=30;
+  for(let i=0;i<count;i++){
+    const p=document.createElement('div');
+    p.className='particle';
+    p.style.left=Math.random()*100+'%';
+    p.style.animationDuration=(Math.random()*15+10)+'s';
+    p.style.animationDelay=(Math.random()*15)+'s';
+    p.style.width=p.style.height=(Math.random()*3+1)+'px';
+    container.appendChild(p);
+  }
+})();
 </script>
 </body>
 </html>
