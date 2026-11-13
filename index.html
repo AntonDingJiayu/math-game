@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Math Practice</title>
+<title>Math PK Arena</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 :root{
@@ -13,8 +13,6 @@
   --accent:#7f5af0;--accent2:#2cb67d;--accent3:#f9c74f;--danger:#e53170;--warn:#f9c74f;
   --text:#fffffe;--text2:#94a1b2;--text3:#6b7280;
   --radius:20px;--shadow:0 8px 32px rgba(0,0,0,.4);
-  --glow-accent:0 0 20px rgba(127,90,240,.4);
-  --glow-accent2:0 0 20px rgba(44,182,125,.4);
 }
 body{
   font-family:'Segoe UI',system-ui,-apple-system,BlinkMacSystemFont,sans-serif;
@@ -26,14 +24,14 @@ body{
 }
 @keyframes bgShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 
-/* 暗角遮罩，增加氛围感 */
+/* 暗角遮罩 */
 .bg-vignette{
   position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;
   background:radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.45) 100%);
   pointer-events:none;
 }
 
-/* 动态渐变背景球 升级6颗 */
+/* 动态渐变背景球 */
 .bg-orbs{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-2;overflow:hidden;pointer-events:none}
 .orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.3;animation:floatOrb 25s infinite ease-in-out}
 .orb:nth-child(1){width:450px;height:450px;background:radial-gradient(circle,var(--accent),transparent 70%);top:-15%;left:-10%;animation-delay:0s}
@@ -59,21 +57,19 @@ body{
 
 /* 浮动粒子 */
 .particles{position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;pointer-events:none;overflow:hidden}
-.particle{position:absolute;width:3px;height:3px;background:rgba(255,255,255,.3);border-radius:50%;animation:rise linear infinite;box-shadow:0 0 6px rgba(255,255,255,.4)}
+.particle{position:absolute;width:3px;height:3px;background:rgba(255,255,255,.3);border-radius:50%;animation:rise linear infinite}
 @keyframes rise{0%{transform:translateY(100vh) translateX(0) scale(0);opacity:0}10%{opacity:1}90%{opacity:1}100%{transform:translateY(-10vh) translateX(100px) scale(1);opacity:0}}
 
 .screen{display:none;width:100%;max-width:560px;padding:20px;animation:fadeIn .6s cubic-bezier(.22,1,.36,1)}
 .screen.active{display:flex;flex-direction:column;align-items:center;gap:24px}
 @keyframes fadeIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 
-@keyframes pulseGlow{0%,100%{box-shadow:0 0 18px rgba(127,90,240,.35)}50%{box-shadow:0 0 35px rgba(127,90,240,.6)}}
 @keyframes shakeX{0%,100%{transform:translateX(0)}15%,45%,75%{transform:translateX(-6px)}30%,60%,90%{transform:translateX(6px)}}
 @keyframes scaleIn{from{transform:scale(.85);opacity:0}to{transform:scale(1);opacity:1}}
 @keyframes slideUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes gradientShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
 @keyframes shimmer{0%{background-position:-200% center}100%{background-position:200% center}}
-@keyframes breathe{0%,100%{transform:translateY(0);filter:drop-shadow(0 0 18px rgba(249,199,79,.4))}50%{transform:translateY(-4px);filter:drop-shadow(0 0 30px rgba(249,199,79,.6))}}
 
 h1{
   font-size:2.4rem;font-weight:900;
@@ -81,13 +77,12 @@ h1{
   background-size:400% 400%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   text-align:center;line-height:1.2;animation:gradientShift 6s ease infinite,float 4s ease-in-out infinite;
-  filter:drop-shadow(0 0 25px rgba(127,90,240,.35));
   letter-spacing:.5px;
 }
 h2{font-size:1.6rem;text-align:center;animation:slideUp .5s ease;font-weight:800}
 .subtitle{color:var(--text2);font-size:.95rem;text-align:center;margin-top:-6px;animation:slideUp .5s ease .1s both;letter-spacing:.3px}
 
-/* 升级玻璃拟态卡片 */
+/* 玻璃拟态卡片 */
 .card{
   background:var(--card);border:1px solid var(--card-border);
   border-radius:var(--radius);padding:32px;width:100%;
@@ -107,12 +102,11 @@ h2{font-size:1.6rem;text-align:center;animation:slideUp .5s ease;font-weight:800
   border-color:var(--card-border-hover);
   box-shadow:
     0 14px 50px rgba(0,0,0,.45),
-    0 0 40px rgba(127,90,240,.12),
     inset 0 1px 0 rgba(255,255,255,.1);
   transform:translateY(-2px);
 }
 
-/* 升级按钮 */
+/* 按钮 */
 .btn{
   border:none;border-radius:14px;padding:16px 30px;font-size:1rem;font-weight:700;
   cursor:pointer;transition:all .3s cubic-bezier(.22,1,.36,1);width:100%;letter-spacing:.5px;
@@ -127,12 +121,11 @@ h2{font-size:1.6rem;text-align:center;animation:slideUp .5s ease;font-weight:800
 .btn-primary{
   background:linear-gradient(135deg,var(--accent),#6b4fe0);
   color:#fff;
-  box-shadow:0 4px 18px rgba(127,90,240,.35);
-  animation:pulseGlow 3s ease-in-out infinite;
+  box-shadow:0 4px 18px rgba(0,0,0,.3);
 }
 .btn-primary:hover{
   transform:translateY(-4px) scale(1.02);
-  box-shadow:0 8px 30px rgba(127,90,240,.5);
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
 }
 .btn-primary:active{transform:translateY(-1px) scale(.98)}
 .btn-secondary{
@@ -147,7 +140,7 @@ h2{font-size:1.6rem;text-align:center;animation:slideUp .5s ease;font-weight:800
 }
 .btn-secondary:active{transform:translateY(0) scale(.98)}
 
-/* 升级输入框 */
+/* 输入框 */
 input[type=text]{
   width:100%;padding:16px 20px;border-radius:14px;
   border:1px solid var(--card-border);
@@ -163,7 +156,6 @@ input[type=text]:focus{
   border-color:var(--accent);
   box-shadow:
     0 0 0 4px rgba(127,90,240,.18),
-    0 0 25px rgba(127,90,240,.25),
     inset 0 2px 6px rgba(0,0,0,.1);
   background:rgba(255,255,255,.09);
 }
@@ -191,12 +183,11 @@ input::placeholder{color:var(--text3);font-weight:400}
   text-transform:uppercase;
 }
 
-/* 游戏区域 升级 */
+/* 游戏区域 */
 .q-card{
   text-align:center;padding:40px 32px;
   border:1px solid var(--card-border);
   background:linear-gradient(135deg,rgba(127,90,240,.06),rgba(44,182,125,.06));
-  animation:breathe 4s ease-in-out infinite;
 }
 .q-card.new-q{animation:scaleIn .4s cubic-bezier(.22,1,.36,1)}
 .q-text{
@@ -204,10 +195,9 @@ input::placeholder{color:var(--text3);font-weight:400}
   margin:18px 0 28px;word-break:break-word;
   min-height:90px;display:flex;align-items:center;justify-content:center;
   white-space:pre-line;
-  text-shadow:0 2px 10px rgba(0,0,0,.3);
 }
 
-/* 升级标签 */
+/* 标签 */
 .tags{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px}
 .tag{
   padding:6px 16px;border-radius:20px;font-size:.78rem;font-weight:700;letter-spacing:.5px;
@@ -223,7 +213,7 @@ input::placeholder{color:var(--text3);font-weight:400}
 .tag-calc{background:linear-gradient(135deg,rgba(255,120,180,.25),rgba(255,120,180,.1));color:#ff9cc4;border:1px solid rgba(255,120,180,.25)}
 .tag-diff{background:rgba(255,255,255,.08);color:var(--text2);border:1px solid rgba(255,255,255,.12)}
 
-/* 升级反馈 */
+/* 反馈 */
 .fb{
   margin-top:16px;padding:16px 20px;border-radius:14px;
   font-weight:700;text-align:center;font-size:1rem;
@@ -234,16 +224,14 @@ input::placeholder{color:var(--text3);font-weight:400}
 .fb.correct{
   background:linear-gradient(135deg,rgba(44,182,125,.15),rgba(44,182,125,.08));
   color:#6ee7b7;border:1px solid rgba(44,182,125,.3);
-  box-shadow:0 0 20px rgba(44,182,125,.15);
 }
 .fb.wrong{
   background:linear-gradient(135deg,rgba(229,49,112,.15),rgba(229,49,112,.08));
   color:#ff8fab;border:1px solid rgba(229,49,112,.3);
   animation:shakeX .55s cubic-bezier(.36,.07,.19,.97);
-  box-shadow:0 0 20px rgba(229,49,112,.15);
 }
 
-/* 升级计分板 */
+/* 计分板 */
 .scoreboards{display:flex;gap:14px;width:100%;flex-wrap:wrap;justify-content:center}
 .sb{
   flex:1 1 120px;min-width:120px;max-width:180px;
@@ -267,7 +255,7 @@ input::placeholder{color:var(--text3);font-weight:400}
 }
 .sb-lv{font-size:.75rem;color:var(--accent);margin-top:6px;font-weight:700;letter-spacing:.5px}
 
-/* 升级进度条 */
+/* 进度条 */
 .progress-bar{
   width:100%;height:10px;background:rgba(255,255,255,.06);
   border-radius:6px;overflow:hidden;position:relative;
@@ -289,14 +277,14 @@ input::placeholder{color:var(--text3);font-weight:400}
 }
 .progress-text{font-size:.8rem;color:var(--text2);text-align:center;margin-top:8px;font-weight:500}
 
-/* 升级结果页面 */
+/* 结果页面 */
 .winner{
   font-size:1.6rem;font-weight:900;text-align:center;
   margin:12px 0;
   background:linear-gradient(135deg,#f9c74f,#f9844a,#ffd880,#f9c74f);
   background-size:300% 300%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  animation:breathe 3s ease-in-out infinite, gradientShift 4s ease infinite;
+  animation:gradientShift 4s ease infinite;
 }
 .final-scores{display:flex;gap:16px;width:100%;margin:16px 0;flex-wrap:wrap;justify-content:center}
 .final-sb{
@@ -311,8 +299,6 @@ input::placeholder{color:var(--text3);font-weight:400}
 .final-sb.winner-box{
   border-color:var(--warn);
   background:linear-gradient(135deg,rgba(249,199,79,.08),rgba(249,199,79,.03));
-  box-shadow:0 0 30px rgba(249,199,79,.2),0 8px 30px rgba(0,0,0,.3);
-  animation:pulseGlow 3s ease-in-out infinite;
 }
 .fs-rank{font-size:.85rem;color:var(--accent);font-weight:700;margin-bottom:6px;letter-spacing:.5px}
 .fs-name{font-size:.9rem;color:var(--text2);font-weight:500}
@@ -331,7 +317,6 @@ input::placeholder{color:var(--text3);font-weight:400}
 .egg67-text{
   position:absolute;font-weight:900;
   color:#ffdd44;
-  text-shadow:0 0 20px #ffaa00, 0 0 40px #ff8800, 0 0 60px #ff6600;
   user-select:none;
 }
 
@@ -358,10 +343,10 @@ input::placeholder{color:var(--text3);font-weight:400}
 
 <!-- MENU -->
 <div class="screen active" id="menuScreen">
-  <h1>🧮 Math Practice</h1>
+  <h1>🧮 Math PK Arena</h1>
   <p class="subtitle">From elementary to high school · Adaptive difficulty · Solo Practice</p>
   <div class="card" style="display:flex;flex-direction:column;gap:14px">
-    <button class="btn btn-primary" onclick="startSolo()">Solo Practice</button>
+    <button class="btn btn-primary" onclick="startSolo()">🎯 Solo Practice</button>
   </div>
 </div>
 
@@ -540,7 +525,7 @@ const pick=arr=>arr[Math.floor(Math.random()*arr.length)];
 const clamp=(v,lo,hi)=>Math.max(lo,Math.min(hi,v));
 const fmt=n=>Number.isInteger(n)?n.toString():parseFloat(n.toFixed(4)).toString();
 
-/* ========== 20级题库 ========== */
+/* ========== 20级扩充题库 每级40题 ========== */
 const bankLv1 = [
   {q:"What is 5 + 8?",a:13,type:"Arithmetic"},
   {q:"Calculate 12 − 4",a:8,type:"Arithmetic"},
@@ -561,7 +546,27 @@ const bankLv1 = [
   {q:"7 × 8 = ?",a:56,type:"Arithmetic"},
   {q:"72 ÷ 8 = ?",a:9,type:"Arithmetic"},
   {q:"13 + 27 = ?",a:40,type:"Arithmetic"},
-  {q:"45 − 19 = ?",a:26,type:"Arithmetic"}
+  {q:"45 − 19 = ?",a:26,type:"Arithmetic"},
+  {q:"7 + 14 = ?",a:21,type:"Arithmetic"},
+  {q:"18 − 9 = ?",a:9,type:"Arithmetic"},
+  {q:"5 × 9 = ?",a:45,type:"Arithmetic"},
+  {q:"81 ÷ 9 = ?",a:9,type:"Arithmetic"},
+  {q:"16 + 25 = ?",a:41,type:"Arithmetic"},
+  {q:"36 − 18 = ?",a:18,type:"Arithmetic"},
+  {q:"4 × 7 = ?",a:28,type:"Arithmetic"},
+  {q:"36 ÷ 4 = ?",a:9,type:"Arithmetic"},
+  {q:"22 + 18 = ?",a:40,type:"Arithmetic"},
+  {q:"42 − 25 = ?",a:17,type:"Arithmetic"},
+  {q:"9 × 6 = ?",a:54,type:"Arithmetic"},
+  {q:"49 ÷ 7 = ?",a:7,type:"Arithmetic"},
+  {q:"14 + 29 = ?",a:43,type:"Arithmetic"},
+  {q:"31 − 14 = ?",a:17,type:"Arithmetic"},
+  {q:"6 × 6 = ?",a:36,type:"Arithmetic"},
+  {q:"64 ÷ 8 = ?",a:8,type:"Arithmetic"},
+  {q:"19 + 23 = ?",a:42,type:"Arithmetic"},
+  {q:"52 − 37 = ?",a:15,type:"Arithmetic"},
+  {q:"8 × 7 = ?",a:56,type:"Arithmetic"},
+  {q:"90 ÷ 10 = ?",a:9,type:"Arithmetic"}
 ];
 const bankLv2 = [
   {q:"0.3 + 0.6 = ?",a:0.9,type:"Arithmetic"},
@@ -583,7 +588,27 @@ const bankLv2 = [
   {q:"4 ÷ 2/3 = ?",a:6,type:"Fraction"},
   {q:"Simplify 12/16, give decimal",a:0.75,type:"Fraction"},
   {q:"Simplify 10/25, give decimal",a:0.4,type:"Fraction"},
-  {q:"0.6 × 0.5 = ?",a:0.3,type:"Arithmetic"}
+  {q:"0.6 × 0.5 = ?",a:0.3,type:"Arithmetic"},
+  {q:"0.7 + 0.23 = ?",a:0.93,type:"Arithmetic"},
+  {q:"2.4 − 1.6 = ?",a:0.8,type:"Arithmetic"},
+  {q:"0.5 × 1.2 = ?",a:0.6,type:"Arithmetic"},
+  {q:"4.8 ÷ 0.8 = ?",a:6,type:"Arithmetic"},
+  {q:"1/3 + 1/6 = ? (decimal)",a:0.5,type:"Fraction"},
+  {q:"7/8 − 1/4 = ? (decimal)",a:0.625,type:"Fraction"},
+  {q:"2/5 × 3/4 = ? (decimal)",a:0.3,type:"Fraction"},
+  {q:"6 ÷ 3/4 = ?",a:8,type:"Fraction"},
+  {q:"Simplify 15/20, give decimal",a:0.75,type:"Fraction"},
+  {q:"0.9 − 0.36 = ?",a:0.54,type:"Arithmetic"},
+  {q:"1.1 + 0.9 = ?",a:2,type:"Arithmetic"},
+  {q:"0.3 × 0.7 = ?",a:0.21,type:"Arithmetic"},
+  {q:"2.5 ÷ 0.5 = ?",a:5,type:"Arithmetic"},
+  {q:"3/5 + 1/10 = ? (decimal)",a:0.7,type:"Fraction"},
+  {q:"4/5 − 1/2 = ? (decimal)",a:0.3,type:"Fraction"},
+  {q:"1/2 × 4/5 = ? (decimal)",a:0.4,type:"Fraction"},
+  {q:"9 ÷ 3/2 = ?",a:6,type:"Fraction"},
+  {q:"Simplify 8/20, give decimal",a:0.4,type:"Fraction"},
+  {q:"0.12 + 0.48 = ?",a:0.6,type:"Arithmetic"},
+  {q:"3.2 − 1.7 = ?",a:1.5,type:"Arithmetic"}
 ];
 const bankLv3 = [
   {q:"What is 10% of 150?",a:15,type:"Percent"},
@@ -605,7 +630,27 @@ const bankLv3 = [
   {q:"12% of 300 = ?",a:36,type:"Percent"},
   {q:"50% of 76 = ?",a:38,type:"Percent"},
   {q:"Ratio 5:2, second=6, first=?",a:15,type:"Ratio"},
-  {q:"Simplify ratio 14:35, give decimal",a:0.4,type:"Ratio"}
+  {q:"Simplify ratio 14:35, give decimal",a:0.4,type:"Ratio"},
+  {q:"20% of 180 = ?",a:36,type:"Percent"},
+  {q:"60% of 90 = ?",a:54,type:"Percent"},
+  {q:"3% of 200 = ?",a:6,type:"Percent"},
+  {q:"Ratio 2:7, first=6, second=?",a:21,type:"Ratio"},
+  {q:"Simplify ratio 16:24, give decimal",a:2/3,type:"Ratio"},
+  {q:"Find x if 5/8 = x/40",a:25,type:"Ratio"},
+  {q:"45% of 200 = ?",a:90,type:"Percent"},
+  {q:"18% of 100 = ?",a:18,type:"Percent"},
+  {q:"Ratio 7:3, second=9, first=?",a:21,type:"Ratio"},
+  {q:"Simplify ratio 30:45, give decimal",a:2/3,type:"Ratio"},
+  {q:"70% of 110 = ?",a:77,type:"Percent"},
+  {q:"35% of 80 = ?",a:28,type:"Percent"},
+  {q:"9% of 300 = ?",a:27,type:"Percent"},
+  {q:"Ratio 3:8, first=9, second=?",a:24,type:"Ratio"},
+  {q:"Simplify ratio 18:27, give decimal",a:2/3,type:"Ratio"},
+  {q:"Find x if 4/9 = x/36",a:16,type:"Ratio"},
+  {q:"55% of 200 = ?",a:110,type:"Percent"},
+  {q:"80% of 75 = ?",a:60,type:"Percent"},
+  {q:"Ratio 6:5, second=20, first=?",a:24,type:"Ratio"},
+  {q:"Simplify ratio 28:49, give decimal",a:4/7,type:"Ratio"}
 ];
 const bankLv4 = [
   {q:"Area of square with side 7",a:49,type:"Geometry"},
@@ -627,7 +672,27 @@ const bankLv4 = [
   {q:"Parallelogram base=12 height=6 area",a:72,type:"Geometry"},
   {q:"Trapezoid a=4,b=6,h=5 area",a:25,type:"Geometry"},
   {q:"Circle r=3 circumference. π=3.14",a:18.84,type:"Geometry"},
-  {q:"Square side=13 perimeter",a:52,type:"Geometry"}
+  {q:"Square side=13 perimeter",a:52,type:"Geometry"},
+  {q:"Area of square side=9",a:81,type:"Geometry"},
+  {q:"Rectangle length=15 width=6 area",a:90,type:"Geometry"},
+  {q:"Triangle base=14 height=5 area",a:35,type:"Geometry"},
+  {q:"Perimeter of square side=10",a:40,type:"Geometry"},
+  {q:"Perimeter of rectangle 8 and 7",a:30,type:"Geometry"},
+  {q:"Circle r=7 circumference. π=3.14",a:43.96,type:"Geometry"},
+  {q:"Circle r=2 area. π=3.14",a:12.56,type:"Geometry"},
+  {q:"Cube side=4 volume",a:64,type:"Geometry"},
+  {q:"Box 6×5×2 volume",a:60,type:"Geometry"},
+  {q:"Parallelogram base=8 height=7 area",a:56,type:"Geometry"},
+  {q:"Trapezoid a=3,b=7,h=4 area",a:20,type:"Geometry"},
+  {q:"Circle r=10 circumference. π=3.14",a:62.8,type:"Geometry"},
+  {q:"Square side=15 perimeter",a:60,type:"Geometry"},
+  {q:"Rectangle length=11 width=8 area",a:88,type:"Geometry"},
+  {q:"Triangle base=16 height=3 area",a:24,type:"Geometry"},
+  {q:"Cube side=8 volume",a:512,type:"Geometry"},
+  {q:"Cuboid 7×3×2 volume",a:42,type:"Geometry"},
+  {q:"Circle r=8 area. π=3.14",a:200.96,type:"Geometry"},
+  {q:"Parallelogram base=15 height=4 area",a:60,type:"Geometry"},
+  {q:"Perimeter of rectangle 14 and 6",a:40,type:"Geometry"}
 ];
 const bankLv5 = [
   {q:"Solve: 2x + 3 = 11",a:4,type:"Algebra"},
@@ -649,7 +714,27 @@ const bankLv5 = [
   {q:"Solve: 3(x+4) = 24",a:4,type:"Algebra"},
   {q:"Solve: 8x − 3x = 40",a:8,type:"Algebra"},
   {q:"Solve: 20 − 4x = 8",a:3,type:"Algebra"},
-  {q:"Solve: x/3 = 9",a:27,type:"Algebra"}
+  {q:"Solve: x/3 = 9",a:27,type:"Algebra"},
+  {q:"Solve: 7x + 6 = 41",a:5,type:"Algebra"},
+  {q:"Solve: 12 − 5x = 2",a:2,type:"Algebra"},
+  {q:"Solve: x/6 = 4",a:24,type:"Algebra"},
+  {q:"Solve: 5(x+2) = 35",a:5,type:"Algebra"},
+  {q:"Solve: 2(x−5) = 12",a:11,type:"Algebra"},
+  {q:"Solve: 9x − 4x = 35",a:7,type:"Algebra"},
+  {q:"Solve: 11 + 2x = 25",a:7,type:"Algebra"},
+  {q:"Solve: 4x − 10 = 22",a:8,type:"Algebra"},
+  {q:"Solve: 30 − 6x = 6",a:4,type:"Algebra"},
+  {q:"Solve: x/7 = 3",a:21,type:"Algebra"},
+  {q:"Solve: 6(x+1) = 36",a:5,type:"Algebra"},
+  {q:"Solve: 4(x−1) = 20",a:6,type:"Algebra"},
+  {q:"Solve: 3x + 7x = 60",a:6,type:"Algebra"},
+  {q:"Solve: 8 + 5x = 33",a:5,type:"Algebra"},
+  {q:"Solve: 10x − 3 = 37",a:4,type:"Algebra"},
+  {q:"Solve: 24 − 3x = 9",a:5,type:"Algebra"},
+  {q:"Solve: x/8 = 5",a:40,type:"Algebra"},
+  {q:"Solve: 7(x−4) = 21",a:7,type:"Algebra"},
+  {q:"Solve: 2x + 8x = 50",a:5,type:"Algebra"},
+  {q:"Solve: 16 + 3x = 31",a:5,type:"Algebra"}
 ];
 const bankLv6 = [
   {q:"Calculate: 2⁴",a:16,type:"Arithmetic"},
@@ -671,7 +756,27 @@ const bankLv6 = [
   {q:"7² − 3³ = ?",a:22,type:"Arithmetic"},
   {q:"3⁴ − 5² = ?",a:56,type:"Arithmetic"},
   {q:"√64 + √36 = ?",a:14,type:"Arithmetic"},
-  {q:"√121 − √49 = ?",a:4,type:"Arithmetic"}
+  {q:"√121 − √49 = ?",a:4,type:"Arithmetic"},
+  {q:"Calculate: 7³",a:343,type:"Arithmetic"},
+  {q:"Calculate: 10³",a:1000,type:"Arithmetic"},
+  {q:"Calculate: 9²",a:81,type:"Arithmetic"},
+  {q:"Calculate: √256",a:16,type:"Arithmetic"},
+  {q:"Calculate: √361",a:19,type:"Arithmetic"},
+  {q:"4³ + 5² = ?",a:89,type:"Arithmetic"},
+  {q:"6³ − 4² = ?",a:200,type:"Arithmetic"},
+  {q:"2⁵ + 3³ = ?",a:59,type:"Arithmetic"},
+  {q:"√81 + √144 = ?",a:21,type:"Arithmetic"},
+  {q:"√196 − √81 = ?",a:5,type:"Arithmetic"},
+  {q:"Calculate: 5⁴",a:625,type:"Arithmetic"},
+  {q:"Calculate: 2⁷",a:128,type:"Arithmetic"},
+  {q:"Calculate: 12²",a:144,type:"Arithmetic"},
+  {q:"Calculate: √289",a:17,type:"Arithmetic"},
+  {q:"Calculate: √400",a:20,type:"Arithmetic"},
+  {q:"3³ + 4³ = ?",a:91,type:"Arithmetic"},
+  {q:"10² − 7² = ?",a:51,type:"Arithmetic"},
+  {q:"5³ − 2⁴ = ?",a:109,type:"Arithmetic"},
+  {q:"√16 + √25 + √36 = ?",a:15,type:"Arithmetic"},
+  {q:"2² × 3³ = ?",a:108,type:"Arithmetic"}
 ];
 const bankLv7 = [
   {q:"Solve |x − 5| = 2, give larger x",a:7,type:"Algebra"},
@@ -693,7 +798,27 @@ const bankLv7 = [
   {q:"| −3 + 9 | = ?",a:6,type:"Arithmetic"},
   {q:"|x − 2| = 10, positive x",a:12,type:"Algebra"},
   {q:"|5 − 12| + 2 = ?",a:9,type:"Arithmetic"},
-  {q:"|3x| = 15, positive x",a:5,type:"Algebra"}
+  {q:"|3x| = 15, positive x",a:5,type:"Algebra"},
+  {q:"|x − 7| = 4, larger x",a:11,type:"Algebra"},
+  {q:"|5x| = 30, positive x",a:6,type:"Algebra"},
+  {q:"|x + 2| = 9, positive x",a:7,type:"Algebra"},
+  {q:"Simplify: | −20 |",a:20,type:"Arithmetic"},
+  {q:"|8 − 17| = ?",a:9,type:"Arithmetic"},
+  {q:"|3x − 9| = 12, positive x",a:7,type:"Algebra"},
+  {q:"| −8 + 3 | = ?",a:5,type:"Arithmetic"},
+  {q:"|x − 6| = 5, larger x",a:11,type:"Algebra"},
+  {q:"|7 − 15| + 3 = ?",a:11,type:"Arithmetic"},
+  {q:"|4x| = 24, positive x",a:6,type:"Algebra"},
+  {q:"|x + 4| = 11, positive x",a:7,type:"Algebra"},
+  {q:"Simplify: | −18 |",a:18,type:"Arithmetic"},
+  {q:"|12 − 20| = ?",a:8,type:"Arithmetic"},
+  {q:"|2x + 3| = 11, positive x",a:4,type:"Algebra"},
+  {q:"| −5 − 5 | = ?",a:10,type:"Arithmetic"},
+  {q:"|x − 10| = 6, larger x",a:16,type:"Algebra"},
+  {q:"|6x| = 42, positive x",a:7,type:"Algebra"},
+  {q:"|9 − 21| + 5 = ?",a:17,type:"Arithmetic"},
+  {q:"|x + 7| = 12, positive x",a:5,type:"Algebra"},
+  {q:"Simplify: | −25 |",a:25,type:"Arithmetic"}
 ];
 const bankLv8 = [
   {q:"Fair coin flip, probability of head (decimal)",a:0.5,type:"Probability"},
@@ -715,7 +840,27 @@ const bankLv8 = [
   {q:"5 red 7 blue, pick red probability (decimal)",a:5/12,type:"Probability"},
   {q:"Coin flip twice, at least one head (decimal)",a:0.75,type:"Probability"},
   {q:"Roll die, probability of NOT 6 (decimal)",a:5/6,type:"Probability"},
-  {q:"2 orange 8 purple, pick orange (decimal)",a:0.2,type:"Probability"}
+  {q:"2 orange 8 purple, pick orange (decimal)",a:0.2,type:"Probability"},
+  {q:"Roll die, probability of 1 or 6 (decimal)",a:1/3,type:"Probability"},
+  {q:"5 red 3 green 2 blue, pick green (decimal)",a:0.3,type:"Probability"},
+  {q:"Two coins, one head one tail probability (decimal)",a:0.5,type:"Probability"},
+  {q:"1~12 pick one, multiple of 4 probability (decimal)",a:1/4,type:"Probability"},
+  {q:"Deck of cards, pick spade probability (decimal)",a:0.25,type:"Probability"},
+  {q:"Roll die, probability ≤3 (decimal)",a:0.5,type:"Probability"},
+  {q:"6 red 4 yellow, pick yellow probability (decimal)",a:0.4,type:"Probability"},
+  {q:"Three coins, exactly two heads probability (decimal)",a:0.375,type:"Probability"},
+  {q:"Two dice, sum=12 probability (decimal)",a:1/36,type:"Probability"},
+  {q:"1~15 pick one, even number probability (decimal)",a:7/15,type:"Probability"},
+  {q:"Roll die, probability of prime number (decimal)",a:0.5,type:"Probability"},
+  {q:"7 white 3 black, pick black probability (decimal)",a:0.3,type:"Probability"},
+  {q:"Two dice, sum=5 probability (decimal)",a:1/9,type:"Probability"},
+  {q:"1~8 pick one, multiple of 3 probability (decimal)",a:0.25,type:"Probability"},
+  {q:"Deck of cards, pick red card probability (decimal)",a:0.5,type:"Probability"},
+  {q:"4 blue 6 red 2 green, pick blue (decimal)",a:1/3,type:"Probability"},
+  {q:"Three coins, at least two heads probability (decimal)",a:0.5,type:"Probability"},
+  {q:"Roll die, probability >2 (decimal)",a:2/3,type:"Probability"},
+  {q:"10 marbles 4 red, pick not red probability (decimal)",a:0.6,type:"Probability"},
+  {q:"Two dice, sum=10 probability (decimal)",a:1/12,type:"Probability"}
 ];
 const bankLv9 = [
   {q:"Sequence 3,7,11,... common difference",a:4,type:"Sequence"},
@@ -737,7 +882,27 @@ const bankLv9 = [
   {q:"Geometric 8,4,2 common ratio",a:0.5,type:"Sequence"},
   {q:"Geometric 1,5,25. 4th term",a:125,type:"Sequence"},
   {q:"Arithmetic: a1=7, d=-2. 6th term",a:-3,type:"Sequence"},
-  {q:"Geometric 4,12,36. Sum first 3 terms",a:52,type:"Sequence"}
+  {q:"Geometric 4,12,36. Sum first 3 terms",a:52,type:"Sequence"},
+  {q:"Sequence 5,12,19,... common difference",a:7,type:"Sequence"},
+  {q:"Arithmetic: a1=10, d=5. 7th term = ?",a:40,type:"Sequence"},
+  {q:"Sequence 5,10,20,... common ratio",a:2,type:"Sequence"},
+  {q:"Geometric: a1=1, r=3. 6th term = ?",a:243,type:"Sequence"},
+  {q:"Arithmetic 15,12,9,... 8th term",a:-6,type:"Sequence"},
+  {q:"Arithmetic 2,5,8. Sum first 6 terms",a:57,type:"Sequence"},
+  {q:"Geometric 16,8,4 common ratio",a:0.5,type:"Sequence"},
+  {q:"Geometric 2,6,18. 5th term",a:162,type:"Sequence"},
+  {q:"Arithmetic: a1=12, d=-3. 7th term",a:-6,type:"Sequence"},
+  {q:"Geometric 3,6,12. Sum first 4 terms",a:45,type:"Sequence"},
+  {q:"Sequence 8,15,22,... common difference",a:7,type:"Sequence"},
+  {q:"Arithmetic: a1=6, d=4. 9th term = ?",a:38,type:"Sequence"},
+  {q:"Sequence 4,12,36,... common ratio",a:3,type:"Sequence"},
+  {q:"Geometric: a1=5, r=2. 6th term = ?",a:160,type:"Sequence"},
+  {q:"Arithmetic 25,21,17... 7th term",a:1,type:"Sequence"},
+  {q:"Arithmetic 4,7,10. Sum first 5 terms",a:50,type:"Sequence"},
+  {q:"Geometric 27,9,3 common ratio",a:1/3,type:"Sequence"},
+  {q:"Geometric 1,4,16. 5th term",a:256,type:"Sequence"},
+  {q:"Arithmetic: a1=20, d=-4. 6th term",a:0,type:"Sequence"},
+  {q:"Geometric 2,4,8. Sum first 5 terms",a:62,type:"Sequence"}
 ];
 const bankLv10 = [
   {q:"x² − 7x + 10 = 0. Sum of roots = ?",a:7,type:"Algebra"},
@@ -759,7 +924,27 @@ const bankLv10 = [
   {q:"x² − 11x + 24 = 0. Smaller root = ?",a:3,type:"Algebra"},
   {q:"2x² − 6x − 8 = 0. Sum of roots = ?",a:3,type:"Algebra"},
   {q:"x² − 49 = 0. Positive root = ?",a:7,type:"Algebra"},
-  {q:"x² + 7x + 12 = 0. Product of roots = ?",a:12,type:"Algebra"}
+  {q:"x² + 7x + 12 = 0. Product of roots = ?",a:12,type:"Algebra"},
+  {q:"x² − 10x + 21 = 0. Sum of roots = ?",a:10,type:"Algebra"},
+  {q:"x² + 8x + 15 = 0. Product of roots = ?",a:15,type:"Algebra"},
+  {q:"x² − 64 = 0. Positive root = ?",a:8,type:"Algebra"},
+  {q:"x² − 7x + 12 = 0. Larger root = ?",a:4,type:"Algebra"},
+  {q:"5x² − 20x + 15 = 0. Sum of roots = ?",a:4,type:"Algebra"},
+  {q:"x² + 4x = 0. Non-zero root = ?",a:-4,type:"Algebra"},
+  {q:"x² − 13x + 42 = 0. Smaller root = ?",a:6,type:"Algebra"},
+  {q:"3x² − 9x − 12 = 0. Sum of roots = ?",a:3,type:"Algebra"},
+  {q:"x² − 81 = 0. Positive root = ?",a:9,type:"Algebra"},
+  {q:"x² + 9x + 20 = 0. Product of roots = ?",a:20,type:"Algebra"},
+  {q:"x² − 14x + 45 = 0. Sum of roots = ?",a:14,type:"Algebra"},
+  {q:"x² + 10x + 21 = 0. Product of roots = ?",a:21,type:"Algebra"},
+  {q:"x² − 100 = 0. Positive root = ?",a:10,type:"Algebra"},
+  {q:"x² − 5x − 6 = 0. Larger root = ?",a:6,type:"Algebra"},
+  {q:"2x² − 8x + 6 = 0. Sum of roots = ?",a:4,type:"Algebra"},
+  {q:"x² − 6x = 0. Non-zero root = ?",a:6,type:"Algebra"},
+  {q:"x² − 15x + 56 = 0. Smaller root = ?",a:7,type:"Algebra"},
+  {q:"4x² − 16x + 12 = 0. Sum of roots = ?",a:4,type:"Algebra"},
+  {q:"x² − 121 = 0. Positive root = ?",a:11,type:"Algebra"},
+  {q:"x² + 11x + 28 = 0. Product of roots = ?",a:28,type:"Algebra"}
 ];
 const bankLv11 = [
   {q:"Slope through (0,0) and (4,8)",a:2,type:"Algebra"},
@@ -781,7 +966,27 @@ const bankLv11 = [
   {q:"Slope through (0,0) and (3,12)",a:4,type:"Algebra"},
   {q:"Slope through (3,5) and (7,5)",a:0,type:"Algebra"},
   {q:"Line y = −x + 4. Slope = ?",a:-1,type:"Algebra"},
-  {q:"Line x + 2y = 6. Slope = ?",a:-0.5,type:"Algebra"}
+  {q:"Line x + 2y = 6. Slope = ?",a:-0.5,type:"Algebra"},
+  {q:"Slope through (2,4) and (6,16)",a:3,type:"Algebra"},
+  {q:"Slope through (1,7) and (4,1)",a:-2,type:"Algebra"},
+  {q:"Line y = 6x + 3. Slope = ?",a:6,type:"Algebra"},
+  {q:"Line y = −3x − 2. Slope = ?",a:-3,type:"Algebra"},
+  {q:"Line 3y = 6x + 9. Slope = ?",a:2,type:"Algebra"},
+  {q:"Line 5x + y = 8. Slope = ?",a:-5,type:"Algebra"},
+  {q:"Slope through (0,8) and (4,0)",a:-2,type:"Algebra"},
+  {q:"Slope through (−1,2) and (3,10)",a:2,type:"Algebra"},
+  {q:"Line y = 0.5x + 1. Slope = ?",a:0.5,type:"Algebra"},
+  {q:"Line 2x + 3y = 6. Slope = ?",a:-2/3,type:"Algebra"},
+  {q:"Slope through (5,3) and (8,12)",a:3,type:"Algebra"},
+  {q:"Slope through (2,12) and (5,3)",a:-3,type:"Algebra"},
+  {q:"Line y = 7x − 5. Slope = ?",a:7,type:"Algebra"},
+  {q:"Line y = −5x + 1. Slope = ?",a:-5,type:"Algebra"},
+  {q:"Line 5y = 10x − 15. Slope = ?",a:2,type:"Algebra"},
+  {q:"Line 4x + y = 2. Slope = ?",a:-4,type:"Algebra"},
+  {q:"Slope through (1,1) and (5,17)",a:4,type:"Algebra"},
+  {q:"Slope through (−2,5) and (2,−3)",a:-2,type:"Algebra"},
+  {q:"Line y = 1.5x + 2. Slope = ?",a:1.5,type:"Algebra"},
+  {q:"Line 3x + 4y = 12. Slope = ?",a:-0.75,type:"Algebra"}
 ];
 const bankLv12 = [
   {q:"sin(30°) = ?",a:0.5,type:"Trigonometry"},
@@ -803,7 +1008,27 @@ const bankLv12 = [
   {q:"Adjacent=12 hypotenuse=13. cosθ = ? (decimal)",a:12/13,type:"Trigonometry"},
   {q:"tan(0°) = ?",a:0,type:"Trigonometry"},
   {q:"sin(45°) ≈ ? (3 decimals)",a:0.707,type:"Trigonometry"},
-  {q:"cos(45°) ≈ ? (3 decimals)",a:0.707,type:"Trigonometry"}
+  {q:"cos(45°) ≈ ? (3 decimals)",a:0.707,type:"Trigonometry"},
+  {q:"sin(150°) = ?",a:0.5,type:"Trigonometry"},
+  {q:"cos(120°) = ?",a:-0.5,type:"Trigonometry"},
+  {q:"tan(135°) = ?",a:-1,type:"Trigonometry"},
+  {q:"Right triangle: opposite=6 adjacent=8. tanθ = ?",a:0.75,type:"Trigonometry"},
+  {q:"Right triangle: opposite=9 hypotenuse=15. sinθ = ?",a:0.6,type:"Trigonometry"},
+  {q:"sin(270°) = ?",a:-1,type:"Trigonometry"},
+  {q:"cos(270°) = ?",a:0,type:"Trigonometry"},
+  {q:"sin(135°) ≈ ? (3 decimals)",a:0.707,type:"Trigonometry"},
+  {q:"cos(150°) ≈ ? (3 decimals)",a:-0.866,type:"Trigonometry"},
+  {q:"tan(120°) ≈ ? (3 decimals)",a:-1.732,type:"Trigonometry"},
+  {q:"Right triangle: adjacent=15 hypotenuse=17. cosθ = ?",a:15/17,type:"Trigonometry"},
+  {q:"Opposite=8 adjacent=15. tanθ = ? (decimal)",a:8/15,type:"Trigonometry"},
+  {q:"sin(210°) = ?",a:-0.5,type:"Trigonometry"},
+  {q:"cos(225°) ≈ ? (3 decimals)",a:-0.707,type:"Trigonometry"},
+  {q:"tan(225°) = ?",a:1,type:"Trigonometry"},
+  {q:"Right triangle: opposite=12 hypotenuse=20. sinθ = ?",a:0.6,type:"Trigonometry"},
+  {q:"Adjacent=9 hypotenuse=15. cosθ = ?",a:0.6,type:"Trigonometry"},
+  {q:"sin(360°) = ?",a:0,type:"Trigonometry"},
+  {q:"cos(360°) = ?",a:1,type:"Trigonometry"},
+  {q:"tan(315°) = ?",a:-1,type:"Trigonometry"}
 ];
 const bankLv13 = [
   {q:"log₂(16) = ?",a:4,type:"Logarithm"},
@@ -825,7 +1050,27 @@ const bankLv13 = [
   {q:"log₁₀(10000) = ?",a:4,type:"Logarithm"},
   {q:"log₃(1/9) = ?",a:-2,type:"Logarithm"},
   {q:"log₁₆(4) = ?",a:0.5,type:"Logarithm"},
-  {q:"log₂(1) = ?",a:0,type:"Logarithm"}
+  {q:"log₂(1) = ?",a:0,type:"Logarithm"},
+  {q:"log₂(128) = ?",a:7,type:"Logarithm"},
+  {q:"log₃(243) = ?",a:5,type:"Logarithm"},
+  {q:"log₅(625) = ?",a:4,type:"Logarithm"},
+  {q:"log₁₀(1) = ?",a:0,type:"Logarithm"},
+  {q:"log₆(36) = ?",a:2,type:"Logarithm"},
+  {q:"log₇(49) = ?",a:2,type:"Logarithm"},
+  {q:"log₂(1/4) = ?",a:-2,type:"Logarithm"},
+  {q:"log₅(1/25) = ?",a:-2,type:"Logarithm"},
+  {q:"log₂₅(5) = ?",a:0.5,type:"Logarithm"},
+  {q:"log₁₀(10) = ?",a:1,type:"Logarithm"},
+  {q:"log₂(256) = ?",a:8,type:"Logarithm"},
+  {q:"log₃(729) = ?",a:6,type:"Logarithm"},
+  {q:"log₄(256) = ?",a:4,type:"Logarithm"},
+  {q:"log₆(216) = ?",a:3,type:"Logarithm"},
+  {q:"log₇(343) = ?",a:3,type:"Logarithm"},
+  {q:"log₃(1/27) = ?",a:-3,type:"Logarithm"},
+  {q:"log₁₀(1/100) = ?",a:-2,type:"Logarithm"},
+  {q:"log₃₆(6) = ?",a:0.5,type:"Logarithm"},
+  {q:"log₈(512) = ?",a:3,type:"Logarithm"},
+  {q:"log₉(1/81) = ?",a:-2,type:"Logarithm"}
 ];
 const bankLv14 = [
   {q:"Derivative of x³, coefficient of x²",a:3,type:"Calculus"},
@@ -847,7 +1092,27 @@ const bankLv14 = [
   {q:"Derivative of 3x⁵, coefficient of x⁴",a:15,type:"Calculus"},
   {q:"Derivative of x^(-1), coefficient of x^(-2)",a:-1,type:"Calculus"},
   {q:"Derivative of 7x⁴, coefficient of x³",a:28,type:"Calculus"},
-  {q:"Derivative of −4x³, coefficient of x²",a:-12,type:"Calculus"}
+  {q:"Derivative of −4x³, coefficient of x²",a:-12,type:"Calculus"},
+  {q:"Derivative of 9x², coefficient of x",a:18,type:"Calculus"},
+  {q:"Derivative of x⁷, coefficient of x⁶",a:7,type:"Calculus"},
+  {q:"Derivative of −5x",a:-5,type:"Calculus"},
+  {q:"Derivative of 8x⁵, coefficient of x⁴",a:40,type:"Calculus"},
+  {q:"Derivative of x^(-2), coefficient of x^(-3)",a:-2,type:"Calculus"},
+  {q:"Derivative of constant −5",a:0,type:"Calculus"},
+  {q:"Derivative of 11x⁴, coefficient of x³",a:44,type:"Calculus"},
+  {q:"Derivative of −6x², coefficient of x",a:-12,type:"Calculus"},
+  {q:"Derivative of x^8, coefficient of x^7",a:8,type:"Calculus"},
+  {q:"Derivative of 2x, coefficient of x⁰",a:2,type:"Calculus"},
+  {q:"Derivative of 5x⁶, coefficient of x⁵",a:30,type:"Calculus"},
+  {q:"Derivative of −9x³, coefficient of x²",a:-27,type:"Calculus"},
+  {q:"Derivative of x^(1/3), coefficient of x^(-2/3)",a:1/3,type:"Calculus"},
+  {q:"Derivative of 10x",a:10,type:"Calculus"},
+  {q:"Derivative of 6x⁵, coefficient of x⁴",a:30,type:"Calculus"},
+  {q:"Derivative of −7x⁴, coefficient of x³",a:-28,type:"Calculus"},
+  {q:"Derivative of x^9, coefficient of x^8",a:9,type:"Calculus"},
+  {q:"Derivative of constant 100",a:0,type:"Calculus"},
+  {q:"Derivative of 12x², coefficient of x",a:24,type:"Calculus"},
+  {q:"Derivative of −2x^5, coefficient of x^4",a:-10,type:"Calculus"}
 ];
 const bankLv15 = [
   {q:"Combination C(5,2) = ?",a:10,type:"Combinatorics"},
@@ -869,7 +1134,27 @@ const bankLv15 = [
   {q:"Permutation P(5,2) = ?",a:20,type:"Combinatorics"},
   {q:"Combination C(9,2) = ?",a:36,type:"Combinatorics"},
   {q:"Permutation P(7,3) = ?",a:210,type:"Combinatorics"},
-  {q:"Combination C(6,2) = ?",a:15,type:"Combinatorics"}
+  {q:"Combination C(6,2) = ?",a:15,type:"Combinatorics"},
+  {q:"Combination C(8,2) = ?",a:28,type:"Combinatorics"},
+  {q:"Combination C(11,2) = ?",a:55,type:"Combinatorics"},
+  {q:"Permutation P(8,2) = ?",a:56,type:"Combinatorics"},
+  {q:"Permutation P(4,3) = ?",a:24,type:"Combinatorics"},
+  {q:"Combination C(10,4) = ?",a:210,type:"Combinatorics"},
+  {q:"Combination C(5,5) = ?",a:1,type:"Combinatorics"},
+  {q:"Permutation P(8,3) = ?",a:336,type:"Combinatorics"},
+  {q:"Combination C(12,2) = ?",a:66,type:"Combinatorics"},
+  {q:"Permutation P(9,2) = ?",a:72,type:"Combinatorics"},
+  {q:"Combination C(8,3) = ?",a:56,type:"Combinatorics"},
+  {q:"Combination C(11,3) = ?",a:165,type:"Combinatorics"},
+  {q:"Permutation P(10,2) = ?",a:90,type:"Combinatorics"},
+  {q:"Permutation P(5,4) = ?",a:120,type:"Combinatorics"},
+  {q:"Combination C(12,3) = ?",a:220,type:"Combinatorics"},
+  {q:"Combination C(7,4) = ?",a:35,type:"Combinatorics"},
+  {q:"Permutation P(9,3) = ?",a:504,type:"Combinatorics"},
+  {q:"Combination C(10,5) = ?",a:252,type:"Combinatorics"},
+  {q:"Permutation P(8,4) = ?",a:1680,type:"Combinatorics"},
+  {q:"Combination C(13,2) = ?",a:78,type:"Combinatorics"},
+  {q:"Permutation P(10,3) = ?",a:720,type:"Combinatorics"}
 ];
 const bankLv16 = [
   {q:"Expand (x+2)². Coefficient of x = ?",a:4,type:"Algebra"},
@@ -891,7 +1176,27 @@ const bankLv16 = [
   {q:"(3x+2)(x+2). Coefficient of x = ?",a:8,type:"Algebra"},
   {q:"(x−7)(x−2). Coefficient of x = ?",a:-9,type:"Algebra"},
   {q:"(2x−3)². Coefficient of x = ?",a:-12,type:"Algebra"},
-  {q:"(x+1)(x−8). Coefficient of x = ?",a:-7,type:"Algebra"}
+  {q:"(x+1)(x−8). Coefficient of x = ?",a:-7,type:"Algebra"},
+  {q:"(x+7)². Coefficient of x = ?",a:14,type:"Algebra"},
+  {q:"(x−8)². Coefficient of x = ?",a:-16,type:"Algebra"},
+  {q:"(x+3)(x+9). Coefficient of x = ?",a:12,type:"Algebra"},
+  {q:"(x−6)(x+2). Coefficient of x = ?",a:-4,type:"Algebra"},
+  {q:"(5x+2)². Coefficient of x = ?",a:20,type:"Algebra"},
+  {q:"(x+8)(x−3). Constant term = ?",a:-24,type:"Algebra"},
+  {q:"(2x+5)(x+3). Coefficient of x = ?",a:11,type:"Algebra"},
+  {q:"(x−9)(x−1). Coefficient of x = ?",a:-10,type:"Algebra"},
+  {q:"(3x+1)². Coefficient of x = ?",a:6,type:"Algebra"},
+  {q:"(x+2)(x−9). Coefficient of x = ?",a:-7,type:"Algebra"},
+  {q:"(x+9)². Coefficient of x = ?",a:18,type:"Algebra"},
+  {q:"(x−10)². Coefficient of x = ?",a:-20,type:"Algebra"},
+  {q:"(x+4)(x+8). Coefficient of x = ?",a:12,type:"Algebra"},
+  {q:"(x−3)(x+7). Coefficient of x = ?",a:4,type:"Algebra"},
+  {q:"(4x+3)². Coefficient of x = ?",a:24,type:"Algebra"},
+  {q:"(x+7)(x−5). Constant term = ?",a:-35,type:"Algebra"},
+  {q:"(3x+4)(x+1). Coefficient of x = ?",a:7,type:"Algebra"},
+  {q:"(x−8)(x−3). Coefficient of x = ?",a:-11,type:"Algebra"},
+  {q:"(5x−2)². Coefficient of x = ?",a:-20,type:"Algebra"},
+  {q:"(x+3)(x−10). Coefficient of x = ?",a:-7,type:"Algebra"}
 ];
 const bankLv17 = [
   {q:"2x + y = 7, x=3. y = ?",a:1,type:"Algebra"},
@@ -913,7 +1218,27 @@ const bankLv17 = [
   {q:"x − 2y = 1, x + y = 7. y = ?",a:2,type:"Algebra"},
   {q:"3x − 2y = 8, x=4. y = ?",a:2,type:"Algebra"},
   {q:"5x + 2y = 21, x=3. y = ?",a:3,type:"Algebra"},
-  {q:"x + y = 14, x − y = 6. x = ?",a:10,type:"Algebra"}
+  {q:"x + y = 14, x − y = 6. x = ?",a:10,type:"Algebra"},
+  {q:"3x + 4y = 25, x=3. y = ?",a:4,type:"Algebra"},
+  {q:"2x + y = 15, x − y = 3. x = ?",a:6,type:"Algebra"},
+  {q:"x + 4y = 18, x=2. y = ?",a:4,type:"Algebra"},
+  {q:"6x − y = 19, x=3. y = ?",a:-1,type:"Algebra"},
+  {q:"x + y = 16, x − y = 4. y = ?",a:6,type:"Algebra"},
+  {q:"5x + 3y = 29, x=4. y = ?",a:3,type:"Algebra"},
+  {q:"2x − 3y = 4, x=5. y = ?",a:2,type:"Algebra"},
+  {q:"4x + y = 18, x − y = 2. x = ?",a:4,type:"Algebra"},
+  {q:"x + 5y = 23, x=3. y = ?",a:4,type:"Algebra"},
+  {q:"7x − y = 20, x=3. y = ?",a:1,type:"Algebra"},
+  {q:"x + y = 18, x − y = 8. x = ?",a:13,type:"Algebra"},
+  {q:"3x + 5y = 31, x=2. y = ?",a:5,type:"Algebra"},
+  {q:"4x − 3y = 11, x=5. y = ?",a:3,type:"Algebra"},
+  {q:"5x + y = 22, x − y = 2. x = ?",a:4,type:"Algebra"},
+  {q:"2x + 7y = 31, x=5. y = ?",a:3,type:"Algebra"},
+  {q:"x + y = 20, x − y = 10. y = ?",a:5,type:"Algebra"},
+  {q:"6x + 2y = 28, x=3. y = ?",a:5,type:"Algebra"},
+  {q:"3x − y = 10, x + y = 6. x = ?",a:4,type:"Algebra"},
+  {q:"x + 6y = 32, x=2. y = ?",a:5,type:"Algebra"},
+  {q:"8x − y = 25, x=3. y = ?",a:-1,type:"Algebra"}
 ];
 const bankLv18 = [
   {q:"√48 = a√3. Find a",a:4,type:"Arithmetic"},
@@ -935,7 +1260,27 @@ const bankLv18 = [
   {q:"√24 = a√6. Find a",a:2,type:"Arithmetic"},
   {q:"√54 = a√6. Find a",a:3,type:"Arithmetic"},
   {q:"√12 + √48 = a√3. Find a",a:6,type:"Arithmetic"},
-  {q:"√8 × √18 = ?",a:12,type:"Arithmetic"}
+  {q:"√8 × √18 = ?",a:12,type:"Arithmetic"},
+  {q:"√108 = a√3. Find a",a:6,type:"Arithmetic"},
+  {q:"√147 = a√3. Find a",a:7,type:"Arithmetic"},
+  {q:"√32 = a√2. Find a",a:4,type:"Arithmetic"},
+  {q:"√27 + √48 = a√3. Find a",a:7,type:"Arithmetic"},
+  {q:"√72 − √18 = a√2. Find a",a:3,type:"Arithmetic"},
+  {q:"√7 × √28 = ?",a:14,type:"Arithmetic"},
+  {q:"√10 × √40 = ?",a:20,type:"Arithmetic"},
+  {q:"√80 = a√5. Find a",a:4,type:"Arithmetic"},
+  {q:"√180 = a√5. Find a",a:6,type:"Arithmetic"},
+  {q:"√50 + √72 = a√2. Find a",a:11,type:"Arithmetic"},
+  {q:"√12 × √3 = ?",a:6,type:"Arithmetic"},
+  {q:"√18 × √8 = ?",a:12,type:"Arithmetic"},
+  {q:"√243 = a√3. Find a",a:9,type:"Arithmetic"},
+  {q:"√96 = a√6. Find a",a:4,type:"Arithmetic"},
+  {q:"√48 − √12 = a√3. Find a",a:2,type:"Arithmetic"},
+  {q:"√128 − √50 = a√2. Find a",a:3,type:"Arithmetic"},
+  {q:"√15 × √60 = ?",a:30,type:"Arithmetic"},
+  {q:"√11 × √44 = ?",a:22,type:"Arithmetic"},
+  {q:"√162 = a√2. Find a",a:9,type:"Arithmetic"},
+  {q:"√200 = a√2. Find a",a:10,type:"Arithmetic"}
 ];
 const bankLv19 = [
   {q:"Mean of 2,4,6,8,10",a:6,type:"Statistics"},
@@ -957,7 +1302,27 @@ const bankLv19 = [
   {q:"Mean of 12,14,16,18",a:15,type:"Statistics"},
   {q:"Median of 3,7,12,16",a:9.5,type:"Statistics"},
   {q:"Mean of 1,3,5,7,9,11",a:6,type:"Statistics"},
-  {q:"Range of 11,3,19,7",a:16,type:"Statistics"}
+  {q:"Range of 11,3,19,7",a:16,type:"Statistics"},
+  {q:"Mean of 4,8,12,16,20",a:12,type:"Statistics"},
+  {q:"Median of 6,2,10,4,8",a:6,type:"Statistics"},
+  {q:"Range of 15,4,22,9",a:18,type:"Statistics"},
+  {q:"Mean of 6,10,14,18",a:12,type:"Statistics"},
+  {q:"Median of 1,5,9,13,17",a:9,type:"Statistics"},
+  {q:"Range of 27,8,14,35",a:27,type:"Statistics"},
+  {q:"Mean of 2,5,8,11,14",a:8,type:"Statistics"},
+  {q:"Median of 12,4,7,15,9",a:9,type:"Statistics"},
+  {q:"Range of 50,12,33,61",a:49,type:"Statistics"},
+  {q:"Mean of 11,13,15,17",a:14,type:"Statistics"},
+  {q:"Median of 8,3,11,5,14",a:8,type:"Statistics"},
+  {q:"Range of 16,7,22,4",a:18,type:"Statistics"},
+  {q:"Mean of 3,7,11,15,19",a:11,type:"Statistics"},
+  {q:"Median of 20,5,12,8,17",a:12,type:"Statistics"},
+  {q:"Range of 42,15,28,55",a:40,type:"Statistics"},
+  {q:"Mean of 5,10,15,20",a:12.5,type:"Statistics"},
+  {q:"Median of 1,6,11,16",a:8.5,type:"Statistics"},
+  {q:"Range of 9,2,14,6",a:12,type:"Statistics"},
+  {q:"Mean of 4,7,10,13,16",a:10,type:"Statistics"},
+  {q:"Median of 14,6,10,2,18",a:10,type:"Statistics"}
 ];
 const bankLv20 = [
   {q:"∫2x dx, coefficient of x²",a:1,type:"Calculus"},
@@ -979,7 +1344,27 @@ const bankLv20 = [
   {q:"∫x⁷ dx, coefficient of x⁸",a:1/8,type:"Calculus"},
   {q:"∫₀³ 2x dx = ?",a:9,type:"Calculus"},
   {q:"∫−4x³ dx, coefficient of x⁴",a:-1,type:"Calculus"},
-  {q:"∫₀² 6x dx = ?",a:12,type:"Calculus"}
+  {q:"∫₀² 6x dx = ?",a:12,type:"Calculus"},
+  {q:"∫12x² dx, coefficient of x³",a:4,type:"Calculus"},
+  {q:"∫x⁴ dx, coefficient of x⁵",a:1/5,type:"Calculus"},
+  {q:"∫7 dx = ?x + C",a:7,type:"Calculus"},
+  {q:"∫₀¹ 4x³ dx = ?",a:1,type:"Calculus"},
+  {q:"∫−2x dx, coefficient of x²",a:-1,type:"Calculus"},
+  {q:"∫₀⁶ x dx = ?",a:18,type:"Calculus"},
+  {q:"∫9x² dx, coefficient of x³",a:3,type:"Calculus"},
+  {q:"∫x⁶ dx, coefficient of x⁷",a:1/7,type:"Calculus"},
+  {q:"∫₀¹ 2x dx = ?",a:1,type:"Calculus"},
+  {q:"∫−5x⁴ dx, coefficient of x⁵",a:-1,type:"Calculus"},
+  {q:"∫14x dx, coefficient of x²",a:7,type:"Calculus"},
+  {q:"∫₀⁷ 2x dx = ?",a:49,type:"Calculus"},
+  {q:"∫x³ dx, coefficient of x⁴",a:0.25,type:"Calculus"},
+  {q:"∫10 dx = ?x + C",a:10,type:"Calculus"},
+  {q:"∫₀³ 3x² dx = ?",a:27,type:"Calculus"},
+  {q:"∫−8x dx, coefficient of x²",a:-4,type:"Calculus"},
+  {q:"∫₀¹ 5x⁴ dx = ?",a:1,type:"Calculus"},
+  {q:"∫15x² dx, coefficient of x³",a:5,type:"Calculus"},
+  {q:"∫x^9 dx, coefficient of x^10",a:0.1,type:"Calculus"},
+  {q:"∫₀¹⁰ 2x dx = ?",a:100,type:"Calculus"}
 ];
 
 const allBanks = [
@@ -995,10 +1380,11 @@ const TOTAL_Q=20;
 let currentQ=null,answered=false;
 const MAX_LEVEL = 20;
 
-const EGG_TEXT = "Anton is handsome";
+const EGG_ANTON = "Anton is handsome";
+const EGG_RAISIN = "Raisin is evil";
 const EGG_67 = "67";
 
-/* ========== 升级67特效 100个错落效果 ========== */
+/* ========== 67特效 ========== */
 function trigger67Effect(){
   const container = $('egg67Container');
   for(let i=0;i<100;i++){
@@ -1112,7 +1498,7 @@ function submitAnswer(){
   }
 
   // Anton彩蛋
-  if(userStr === EGG_TEXT){
+  if(userStr === EGG_ANTON){
     answered=true;
     $('answerInput').disabled=true;
     $('submitBtn').style.display='none';$('nextBtn').style.display='';
@@ -1120,7 +1506,24 @@ function submitAnswer(){
     p.score+=10*p.lv;p.correct++;p._lastCorrect=true;
     const fb=$('feedback');
     fb.className='fb show correct';
-    fb.innerHTML = `Correct! 🎉 Secret bonus! (+${10*p.lv})`;
+    fb.innerHTML = `Correct,very objective and obviously! (+${10*p.lv})`;
+    sfxCorrect();
+    qCount++;
+    renderScoreboards();
+    if(qCount>=TOTAL_Q){setTimeout(showResult,1400);return;}
+    return;
+  }
+
+  // Raisin彩蛋
+  if(userStr === EGG_RAISIN){
+    answered=true;
+    $('answerInput').disabled=true;
+    $('submitBtn').style.display='none';$('nextBtn').style.display='';
+    const p=players[0];
+    p.score+=10*p.lv;p.correct++;p._lastCorrect=true;
+    const fb=$('feedback');
+    fb.className='fb show correct';
+    fb.innerHTML = `You are so right! (+${10*p.lv})`;
     sfxCorrect();
     qCount++;
     renderScoreboards();
